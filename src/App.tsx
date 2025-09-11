@@ -1,9 +1,9 @@
-import AllRestaurants from './components/AllRestaurants'
+import Home from './pages/Home'
 
 function App() {
     return (
     <>
-      <AllRestaurants />
+      <Home />
     </>
   )
 }

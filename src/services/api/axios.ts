@@ -1,19 +1,16 @@
 import axios from 'axios';
-
-// Base URL dari backend - menggunakan environment variables
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
-const timeout = parseInt(import.meta.env.VITE_API_TIMEOUT || '10000');
-const tokenKey = import.meta.env.VITE_AUTH_TOKEN_KEY || 'auth_token';
-const userDataKey = import.meta.env.VITE_USER_DATA_KEY || 'user_data';
+import { env, API_CONFIG } from '../../config';
 
 // Create axios instance
 const api = axios.create({
-  baseURL,
-  timeout,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: env.API_BASE_URL,
+  timeout: env.API_TIMEOUT,
+  headers: API_CONFIG.HEADERS,
 });
+
+// Token and user data keys
+const tokenKey = 'jwt_token';
+const userDataKey = 'user_data';
 
 // Request interceptor untuk menambahkan token
 api.interceptors.request.use(

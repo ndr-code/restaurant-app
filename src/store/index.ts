@@ -2,12 +2,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 
-// Import slices
-import authReducer from './slices/authSlice';
-import restaurantReducer from './slices/restaurantSlice';
-import cartReducer from './slices/cartSlice';
-import orderReducer from './slices/orderSlice';
-import reviewReducer from './slices/reviewSlice';
+// Import reducers from features
+import { authReducer } from '../features/auth';
+import { restaurantReducer } from '../features/restaurant';
+import { cartReducer } from '../features/cart';
+import { orderReducer } from '../features/order';
+import { reviewReducer } from '../features/review';
 
 export const store = configureStore({
   reducer: {

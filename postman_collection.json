@@ -1,0 +1,1093 @@
+{
+  "info": {
+    "name": "Foody Restaurant API - Complete Collection",
+    "description": "Complete API collection for testing restaurant backend with all authentication endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Validate response structure",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect([200, 201]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success field\", function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson).to.have.property('success');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{$randomFullName}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"phone\": \"0812{{$randomInt}}\",\n  \"password\": \"StrongPass123!\",\n  \"confirmPassword\": \"StrongPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Auto save JWT token after successful login",
+                  "if (pm.response.json().success && pm.response.json().data.token) {",
+                  "    pm.environment.set(\"jwt_token\", pm.response.json().data.token);",
+                  "    console.log(\"JWT Token saved to environment\");",
+                  "}",
+                  "",
+                  "// Validate login response",
+                  "pm.test(\"Login successful\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('token');",
+                  "    pm.expect(responseJson.data).to.have.property('user');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test123@example.com\",\n  \"password\": \"StrongPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Profile retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('id');",
+                  "    pm.expect(responseJson.data).to.have.property('name');",
+                  "    pm.expect(responseJson.data).to.have.property('email');",
+                  "    pm.expect(responseJson.data).to.have.property('phone');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile (Name & Phone)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Profile updated successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('name');",
+                  "    pm.expect(responseJson.data).to.have.property('phone');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{$randomFullName}} Updated\",\n  \"phone\": \"08987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile (Change Password)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Password updated successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"StrongPass123!\",\n  \"newPassword\": \"NewStrongPass456!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "Get All Restaurants (with filters)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Restaurants retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('restaurants');",
+                  "    pm.expect(responseJson.data).to.have.property('pagination');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resto?location=Jakarta&priceMin=10000&priceMax=50000&rating=4&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "resto"],
+              "query": [
+                {
+                  "key": "location",
+                  "value": "Jakarta"
+                },
+                {
+                  "key": "priceMin",
+                  "value": "10000"
+                },
+                {
+                  "key": "priceMax",
+                  "value": "50000"
+                },
+                {
+                  "key": "rating",
+                  "value": "4"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Recommended Restaurants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Recommended restaurants retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('restaurants');",
+                  "    pm.expect(responseJson.data.restaurants).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resto/recommended",
+              "host": ["{{base_url}}"],
+              "path": ["api", "resto", "recommended"]
+            }
+          }
+        },
+        {
+          "name": "Get Restaurant Detail",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Restaurant detail retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('restaurant');",
+                  "    pm.expect(responseJson.data.restaurant).to.have.property('id');",
+                  "    pm.expect(responseJson.data.restaurant).to.have.property('name');",
+                  "    pm.expect(responseJson.data.restaurant).to.have.property('menus');",
+                  "    pm.expect(responseJson.data.restaurant).to.have.property('reviews');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/resto/25?limitMenu=5&limitReview=3",
+              "host": ["{{base_url}}"],
+              "path": ["api", "resto", "25"],
+              "query": [
+                {
+                  "key": "limitMenu",
+                  "value": "5"
+                },
+                {
+                  "key": "limitReview",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart Management",
+      "item": [
+        {
+          "name": "Add to Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Auto save cart item ID for later operations",
+                  "if (pm.response.json().success && pm.response.json().data.cartItem) {",
+                  "    pm.environment.set(\"last_cart_item_id\", pm.response.json().data.cartItem.id);",
+                  "    console.log(\"Cart Item ID saved:\", pm.response.json().data.cartItem.id);",
+                  "}",
+                  "",
+                  "pm.test(\"Item added to cart successfully\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('cartItem');",
+                  "    pm.expect(responseJson.data.cartItem).to.have.property('id');",
+                  "    pm.expect(responseJson.data.cartItem).to.have.property('quantity');",
+                  "    pm.expect(responseJson.data.cartItem).to.have.property('itemTotal');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": 25,\n  \"menuId\": 28,\n  \"quantity\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cart",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart"]
+            }
+          }
+        },
+        {
+          "name": "Get Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cart retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('cart');",
+                  "    pm.expect(responseJson.data).to.have.property('summary');",
+                  "    pm.expect(responseJson.data.summary).to.have.property('totalItems');",
+                  "    pm.expect(responseJson.data.summary).to.have.property('totalPrice');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cart",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart"]
+            }
+          }
+        },
+        {
+          "name": "Update Cart Item Quantity",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cart item updated successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('cartItem');",
+                  "    pm.expect(responseJson.data.cartItem.quantity).to.equal(5);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cart/{{last_cart_item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "{{last_cart_item_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Remove Cart Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cart item removed successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.message).to.include('removed');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cart/{{last_cart_item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart", "{{last_cart_item_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Clear Entire Cart",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Cart cleared successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.message).to.include('cleared');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/cart",
+              "host": ["{{base_url}}"],
+              "path": ["api", "cart"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order (Checkout)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Auto save transaction ID and order ID for later operations",
+                  "if (pm.response.json().success && pm.response.json().data.transactionId) {",
+                  "    pm.environment.set(\"last_transaction_id\", pm.response.json().data.transactionId);",
+                  "    console.log(\"Transaction ID saved:\", pm.response.json().data.transactionId);",
+                  "}",
+                  "if (pm.response.json().success && pm.response.json().data.orderId) {",
+                  "    pm.environment.set(\"last_order_id\", pm.response.json().data.orderId);",
+                  "    console.log(\"Order ID saved:\", pm.response.json().data.orderId);",
+                  "}",
+                  "",
+                  "pm.test(\"Order created successfully\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('transactionId');",
+                  "    pm.expect(responseJson.data).to.have.property('totalAmount');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"deliveryAddress\": \"Jl. Sudirman No. 123, Jakarta\",\n  \"paymentMethod\": \"credit_card\",\n  \"notes\": \"Jangan terlalu pedas\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/order/checkout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "checkout"]
+            }
+          }
+        },
+        {
+          "name": "Get My Orders (with status filter)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Orders retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('orders');",
+                  "    pm.expect(responseJson.data).to.have.property('pagination');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/order/my-order?status=preparing&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "my-order"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "preparing",
+                  "description": "Filter by order status: preparing, on_the_way, delivered, done, cancelled"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Order status updated successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('order');",
+                  "    pm.expect(responseJson.data.order).to.have.property('status');",
+                  "    pm.expect(responseJson.data.order.status).to.equal('on_the_way');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"on_the_way\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/order/{{last_order_id}}/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "order", "{{last_order_id}}", "status"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Auto save review ID for later operations",
+                  "if (pm.response.json().success && pm.response.json().data.review) {",
+                  "    pm.environment.set(\"last_review_id\", pm.response.json().data.review.id);",
+                  "    console.log(\"Review ID saved:\", pm.response.json().data.review.id);",
+                  "}",
+                  "",
+                  "pm.test(\"Review created successfully\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('review');",
+                  "    pm.expect(responseJson.data.review).to.have.property('id');",
+                  "    pm.expect(responseJson.data.review).to.have.property('star');",
+                  "    pm.expect(responseJson.data.review).to.have.property('comment');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionId\": \"{{last_transaction_id}}\",\n  \"restaurantId\": 25,\n  \"star\": 5,\n  \"comment\": \"Makanan sangat enak dan pelayanan memuaskan! Rendang dagingnya luar biasa.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/review",
+              "host": ["{{base_url}}"],
+              "path": ["api", "review"]
+            }
+          }
+        },
+        {
+          "name": "Get Restaurant Reviews",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Restaurant reviews retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('reviews');",
+                  "    pm.expect(responseJson.data).to.have.property('pagination');",
+                  "    pm.expect(responseJson.data).to.have.property('summary');",
+                  "    pm.expect(responseJson.data.reviews).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/review/restaurant/25?rating=5&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "review", "restaurant", "25"],
+              "query": [
+                {
+                  "key": "rating",
+                  "value": "5",
+                  "description": "Filter by specific rating (1-5)"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get My Reviews",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"My reviews retrieved successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('reviews');",
+                  "    pm.expect(responseJson.data).to.have.property('pagination');",
+                  "    pm.expect(responseJson.data).to.have.property('summary');",
+                  "    pm.expect(responseJson.data.reviews).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/review/my-reviews?page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "review", "my-reviews"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Review updated successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.data).to.have.property('review');",
+                  "    pm.expect(responseJson.data.review).to.have.property('star');",
+                  "    pm.expect(responseJson.data.review.star).to.equal(4);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"star\": 4,\n  \"comment\": \"Updated review: Makanan enak tapi pelayanan bisa diperbaiki.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/review/{{last_review_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "review", "{{last_review_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Review deleted successfully\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    pm.expect(responseJson.message).to.include('deleted');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/review/{{last_review_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "review", "{{last_review_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Simple Test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/test",
+              "host": ["{{base_url}}"],
+              "path": ["test"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global pre-request script",
+          "console.log('Request to:', pm.request.url.toString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script",
+          "pm.test('Response time is less than 5000ms', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});",
+          "",
+          "pm.test('Response has JSON content-type', function () {",
+          "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://be-restaurant-app-for-mentee-b6yxog5fk.vercel.app",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_transaction_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_cart_item_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_order_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "last_review_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

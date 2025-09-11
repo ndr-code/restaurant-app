@@ -1,7 +1,9 @@
+import { ReduxExamples } from "./examples/ReduxExamples"
+
 function App() {
     return (
     <>
-      Go!
+      <ReduxExamples />
     </>
   )
 }

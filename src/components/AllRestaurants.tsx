@@ -5,8 +5,7 @@ import {
   setFilters, 
   setCurrentPage, 
   selectFilters, 
-  selectPagination 
-} from '../features/restaurant/restaurantUISlice';
+} from '@/features/restaurant/restaurantUISlice';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 
@@ -26,29 +25,130 @@ interface RestaurantFromAPI {
   };
 }
 
+//Component untuk menangani image dengan fallback
+const RestaurantImageWithFallback: React.FC<{
+  images: string[];
+  name: string;
+  className?: string;
+  restaurantId?: number;
+}> = ({ images, name, className = "", restaurantId }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fallback images yang akan dicoba secara berurutan
+  const fallbackImages = [
+    // Restaurant interiors - modern & cozy
+    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400&h=300&fit=crop&crop=center',
+    
+    // Outdoor dining & cafe vibes
+    'https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1590846406792-0adc7f938f1d?w=400&h=300&fit=crop&crop=center',
+    
+    // Food presentation & kitchen
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1551218808-94e220e084d2?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1581299894007-aaa50297cf16?w=400&h=300&fit=crop&crop=center',
+    
+    // Bar & fine dining
+    'https://images.unsplash.com/photo-1530062845289-9109b2c9c868?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&crop=center',
+    
+    // Coffee & casual dining
+    'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop&crop=center',
+    'https://images.unsplash.com/photo-1521302080393-2c9e1d3a4302?w=400&h=300&fit=crop&crop=center',
+  ];
+
+  // Shuffle fallback images berdasarkan restaurantId untuk variasi yang konsisten
+  const getShuffledFallbacks = (id: number) => {
+    const shuffled = [...fallbackImages];
+    let currentIndex = shuffled.length;
+    let randomIndex;
+    
+    // Use restaurantId as seed for consistent randomization
+    const seed = id || Math.floor(Math.random() * 1000);
+    
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(((seed * currentIndex) % 1000) / 1000 * currentIndex);
+      currentIndex--;
+      [shuffled[currentIndex], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[currentIndex]];
+    }
+    return shuffled;
+  };
+
+  const shuffledFallbacks = getShuffledFallbacks(restaurantId || 0);
+  const allImages = [...(images || []), ...shuffledFallbacks];
+  const currentImage = allImages[currentImageIndex];
+
+  const handleImageError = () => {
+    if (currentImageIndex < allImages.length - 1) {
+      setCurrentImageIndex(prev => prev + 1);
+      setIsLoading(true); // Reset loading state untuk image berikutnya
+    } else {
+      setHasError(true);
+      setIsLoading(false);
+    }
+  };
+
+  const handleImageLoad = () => {
+    setHasError(false);
+    setIsLoading(false);
+  };
+
+  if (hasError || !currentImage) {
+    // Final fallback jika semua image gagal load
+    return (
+      <div className={`bg-gradient-to-br from-gray-100 to-gray-200 flex flex-col items-center justify-center ${className}`}>
+        <div className="text-4xl mb-2">🍽️</div>
+        <div className="text-sm text-gray-500 text-center px-2 font-medium">
+          {name}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${className}`}>
+      {isLoading && (
+        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+          <div className="flex flex-col items-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-blue-600"></div>
+            <div className="text-xs text-gray-500 mt-2">Loading...</div>
+          </div>
+        </div>
+      )}
+      <img
+        src={currentImage}
+        alt={name}
+        className="w-full h-full object-cover"
+        onError={handleImageError}
+        onLoad={handleImageLoad}
+        loading="lazy"
+        style={{ opacity: isLoading ? 0 : 1, transition: 'opacity 0.3s' }}
+      />
+    </div>
+  );
+};
+
 const AllRestaurants: React.FC = () => {
   const dispatch = useAppDispatch();
   const filters = useAppSelector(selectFilters);
-  const pagination = useAppSelector(selectPagination);
-  const [hasLoaded, setHasLoaded] = useState(false);
   
-  // React Query untuk server state
+  // React Query untuk server state - langsung aktif
   const { 
     data: restaurantData, 
     isLoading, 
     error,
     refetch 
-  } = useRestaurants(filters, { enabled: hasLoaded });
+  } = useRestaurants(filters);
 
   const restaurants = restaurantData?.restaurants || [];
   const paginationMeta = restaurantData?.pagination;
-
-  const handleLoadRestaurants = () => {
-    setHasLoaded(true);
-    if (!hasLoaded) {
-      refetch();
-    }
-  };
 
   const handlePageChange = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -73,22 +173,11 @@ const AllRestaurants: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            🍽️ Restaurant Discovery
+            Restaurant Discovery
           </h1>
           <p className="text-lg text-gray-600 mb-8">
             Temukan restoran terbaik di sekitar Anda dengan React Query + Redux
           </p>
-          
-          {!hasLoaded && (
-            <Button 
-              onClick={handleLoadRestaurants}
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Memuat...' : '🔍 Tampilkan Semua Restoran'}
-            </Button>
-          )}
         </div>
 
         {/* Error State */}
@@ -105,7 +194,7 @@ const AllRestaurants: React.FC = () => {
         )}
 
         {/* Loading State */}
-        {isLoading && hasLoaded && (
+        {isLoading && (
           <div className="text-center py-8">
             <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             <p className="mt-2 text-gray-600">Memuat restoran...</p>
@@ -113,12 +202,12 @@ const AllRestaurants: React.FC = () => {
         )}
 
         {/* Restaurants Grid */}
-        {hasLoaded && restaurants.length > 0 && (
+        {restaurants.length > 0 && (
           <div className="space-y-6">
             {/* Header dengan Pagination */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <h2 className="text-2xl font-semibold text-gray-900">
-                📍 Daftar Restoran ({restaurants.length})
+                Daftar Restoran ({restaurants.length})
               </h2>
               
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -174,13 +263,11 @@ const AllRestaurants: React.FC = () => {
                 >
                   {/* Restaurant Image */}
                   <div className="relative h-48 overflow-hidden rounded-t-lg">
-                    <img
-                      src={restaurantData.images?.[0] || '/placeholder-restaurant.jpg'}
-                      alt={restaurantData.name}
+                    <RestaurantImageWithFallback 
+                      images={restaurantData.images || []}
+                      name={restaurantData.name}
+                      restaurantId={restaurantData.id}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=Restaurant';
-                      }}
                     />
                     <div className="absolute top-2 right-2 bg-white bg-opacity-90 rounded-full px-2 py-1 text-xs font-medium">
                       ⭐ {restaurantData.star?.toFixed(1)}
@@ -237,7 +324,7 @@ const AllRestaurants: React.FC = () => {
         )}
 
         {/* Empty State */}
-        {hasLoaded && restaurants.length === 0 && !isLoading && !error && (
+        {restaurants.length === 0 && !isLoading && !error && (
           <div className="text-center py-16">
             <div className="text-gray-400 mb-4">
               <div className="text-6xl mb-4">🍽️</div>
@@ -248,86 +335,13 @@ const AllRestaurants: React.FC = () => {
             <p className="text-gray-600 mb-6">
               Coba refresh atau periksa koneksi internet Anda
             </p>
-            <Button onClick={handleLoadRestaurants} variant="outline">
+            <Button onClick={handleRefresh} variant="outline">
               🔄 Coba Lagi
             </Button>
           </div>
         )}
 
-        {/* State Management Debug Info */}
-        {hasLoaded && (
-          <div className="mt-12 p-6 bg-white rounded-lg border-2 border-dashed border-gray-200">
-            <h4 className="font-semibold mb-4 flex items-center gap-2">
-              🔧 State Management Architecture
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* React Query Info */}
-              <div className="space-y-2">
-                <h5 className="font-medium text-green-700 flex items-center gap-2">
-                  🌐 React Query (Server State)
-                </h5>
-                <div className="text-sm space-y-1">
-                  <div className="flex justify-between">
-                    <span>Data:</span>
-                    <span className="font-mono">{restaurants.length} restaurants</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Loading:</span>
-                    <span className={`font-mono ${isLoading ? 'text-yellow-600' : 'text-green-600'}`}>
-                      {isLoading ? 'Yes' : 'No'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Error:</span>
-                    <span className={`font-mono ${error ? 'text-red-600' : 'text-green-600'}`}>
-                      {error ? 'Yes' : 'No'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Cache:</span>
-                    <span className="font-mono text-blue-600">Auto-managed</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Redux Info */}
-              <div className="space-y-2">
-                <h5 className="font-medium text-blue-700 flex items-center gap-2">
-                  📱 Redux (UI State)
-                </h5>
-                <div className="text-sm space-y-1">
-                  <div className="flex justify-between">
-                    <span>Current Page:</span>
-                    <span className="font-mono">{pagination.currentPage}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Items Per Page:</span>
-                    <span className="font-mono">{pagination.itemsPerPage}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Has Filters:</span>
-                    <span className="font-mono">
-                      {Object.values(filters).some(v => v && v !== '') ? 'Yes' : 'No'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>State Sync:</span>
-                    <span className="font-mono text-green-600">Perfect</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-4 p-3 bg-blue-50 rounded text-xs">
-              <strong className="text-blue-800">💡 Architecture Benefits:</strong>
-              <div className="mt-1 text-blue-700">
-                Server state (API data) managed by React Query with automatic caching, 
-                background updates & error handling. UI state (filters, pagination) managed by Redux 
-                for predictable updates & persistence.
-              </div>
-            </div>
-          </div>
-        )}
+        
       </div>
     </div>
   );

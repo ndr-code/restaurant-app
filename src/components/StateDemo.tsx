@@ -7,7 +7,7 @@ import {
   setSortBy,
   toggleFilterModal,
   selectRestaurantUI 
-} from '../features/restaurant/restaurantUISlice';
+} from '@/features/restaurant/restaurantUISlice';
 
 const StateDemo: React.FC = () => {
   const dispatch = useAppDispatch();

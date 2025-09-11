@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { useDispatch, useSelector } from 'react-redux';
-import type { TypedUseSelectorHook } from 'react-redux';
 
 // Import reducers from features
-import { authReducer } from '../features/auth';
-import { cartReducer } from '../features/cart';
-import { orderReducer } from '../features/order';
-import { reviewReducer } from '../features/review';
-import restaurantUIReducer from '../features/restaurant/restaurantUISlice';
+import { authReducer } from '@/features/auth';
+import { cartReducer } from '@/features/cart';
+import { orderReducer } from '@/features/order';
+import { reviewReducer } from '@/features/review';
+import restaurantUIReducer from '@/features/restaurant/restaurantUISlice';
 
 export const store = configureStore({
   reducer: {
@@ -29,7 +27,10 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-// Typed hooks
+// Typed hooks  
+import { useDispatch, useSelector } from 'react-redux';
+import type { TypedUseSelectorHook } from 'react-redux';
+
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 

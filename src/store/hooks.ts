@@ -1,20 +1,3 @@
-/**
- * Redux Store Hooks
- * 
- * Provides typed selectors for Redux state (UI/Client state only).
- * 
- * NOTE: For server state (API data), use React Query hooks from:
- * - src/services/queries/restaurant.ts (useRestaurants, useRestaurantDetail, etc.)
- * - src/services/queries/menu.ts (useMenus, etc.)
- * - src/services/queries/order.ts (useOrders, etc.)
- * 
- * This file only contains hooks for UI state managed by Redux:
- * - Authentication state
- * - UI preferences (filters, sorting, modals)
- * - Cart state (client-side)
- * - Form states
- */
-
 import { useAppSelector } from '../store';
 
 // Auth selectors

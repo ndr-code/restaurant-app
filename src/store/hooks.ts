@@ -1,3 +1,20 @@
+/**
+ * Redux Store Hooks
+ * 
+ * Provides typed selectors for Redux state (UI/Client state only).
+ * 
+ * NOTE: For server state (API data), use React Query hooks from:
+ * - src/services/queries/restaurant.ts (useRestaurants, useRestaurantDetail, etc.)
+ * - src/services/queries/menu.ts (useMenus, etc.)
+ * - src/services/queries/order.ts (useOrders, etc.)
+ * 
+ * This file only contains hooks for UI state managed by Redux:
+ * - Authentication state
+ * - UI preferences (filters, sorting, modals)
+ * - Cart state (client-side)
+ * - Form states
+ */
+
 import { useAppSelector } from '../store';
 
 // Auth selectors
@@ -19,22 +36,22 @@ export const useAuth = () => {
   };
 };
 
-// Restaurant selectors
-export const useRestaurants = () => {
-  const restaurant = useAppSelector((state) => state.restaurant);
+// Restaurant UI selectors (Client State only - Server state handled by React Query)
+export const useRestaurantUI = () => {
+  const restaurantUI = useAppSelector((state) => state.restaurantUI);
   
   return {
-    restaurants: restaurant.restaurants,
-    pagination: restaurant.restaurantsPagination,
-    isLoading: restaurant.isRestaurantsLoading,
-    error: restaurant.restaurantsError,
-    recommendedRestaurants: restaurant.recommendedRestaurants,
-    isRecommendedLoading: restaurant.isRecommendedLoading,
-    recommendedError: restaurant.recommendedError,
-    selectedRestaurant: restaurant.selectedRestaurant,
-    isDetailLoading: restaurant.isDetailLoading,
-    detailError: restaurant.detailError,
-    currentFilters: restaurant.currentFilters,
+    searchQuery: restaurantUI.searchQuery,
+    filters: restaurantUI.filters,
+    sortBy: restaurantUI.sortBy,
+    sortOrder: restaurantUI.sortOrder,
+    isFilterModalOpen: restaurantUI.isFilterModalOpen,
+    isMapViewActive: restaurantUI.isMapViewActive,
+    viewMode: restaurantUI.viewMode,
+    currentPage: restaurantUI.currentPage,
+    itemsPerPage: restaurantUI.itemsPerPage,
+    showFavoritesOnly: restaurantUI.showFavoritesOnly,
+    compactView: restaurantUI.compactView,
   };
 };
 
@@ -104,7 +121,6 @@ export const useReviews = () => {
 // Utility selectors
 export const useLoadingStates = () => {
   const auth = useAppSelector((state) => state.auth);
-  const restaurant = useAppSelector((state) => state.restaurant);
   const cart = useAppSelector((state) => state.cart);
   const order = useAppSelector((state) => state.order);
   const review = useAppSelector((state) => state.review);
@@ -115,9 +131,6 @@ export const useLoadingStates = () => {
       auth.isRegisterLoading ||
       auth.isProfileLoading ||
       auth.isPasswordChanging ||
-      restaurant.isRestaurantsLoading ||
-      restaurant.isRecommendedLoading ||
-      restaurant.isDetailLoading ||
       cart.isLoading ||
       cart.isAddingToCart ||
       cart.isUpdatingItem ||
@@ -146,5 +159,44 @@ export const useRestaurantReviews = (restaurantId: number) => {
     summary: restaurantReviews?.summary || null,
     isLoading,
     error,
+  };
+};
+
+// Combined hooks for better DX
+/**
+ * Combined Restaurant State Hook
+ * 
+ * Combines React Query (server state) with Redux (UI state) for restaurants.
+ * This is a convenience hook that demonstrates how to use both together.
+ * 
+ * @example
+ * const { 
+ *   // Server state (React Query)
+ *   restaurants, isLoading, error, 
+ *   // UI state (Redux)
+ *   filters, searchQuery, sortBy 
+ * } = useCombinedRestaurantState();
+ */
+export const useCombinedRestaurantState = () => {
+  // UI State from Redux
+  const uiState = useRestaurantUI();
+  
+  // Note: Server state would be handled by React Query hooks like:
+  // const { data, isLoading, error } = useRestaurants(uiState.filters);
+  
+  return {
+    // UI State (Redux)
+    ...uiState,
+    
+    // Helper methods
+    getCurrentFilters: () => uiState.filters,
+    getSearchParams: () => ({
+      query: uiState.searchQuery,
+      ...uiState.filters,
+      sortBy: uiState.sortBy,
+      sortOrder: uiState.sortOrder,
+      page: uiState.currentPage,
+      limit: uiState.itemsPerPage,
+    }),
   };
 };

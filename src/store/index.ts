@@ -4,15 +4,15 @@ import type { TypedUseSelectorHook } from 'react-redux';
 
 // Import reducers from features
 import { authReducer } from '../features/auth';
-import { restaurantReducer } from '../features/restaurant';
 import { cartReducer } from '../features/cart';
 import { orderReducer } from '../features/order';
 import { reviewReducer } from '../features/review';
+import restaurantUIReducer from '../features/restaurant/restaurantUISlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    restaurant: restaurantReducer,
+    restaurantUI: restaurantUIReducer, // Hanya UI state untuk restaurant
     cart: cartReducer,
     order: orderReducer,
     review: reviewReducer,

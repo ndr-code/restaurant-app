@@ -1,9 +1,9 @@
-import { ReduxExamples } from "./examples/ReduxExamples"
+import AllRestaurants from './components/AllRestaurants'
 
 function App() {
     return (
     <>
-      <ReduxExamples />
+      <AllRestaurants />
     </>
   )
 }

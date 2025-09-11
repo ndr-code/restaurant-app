@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useAppDispatch } from '../store';
 import { useRestaurants } from '../store/hooks';
-import { fetchRestaurants } from '../store/slices/restaurantSlice';
+import { fetchRestaurants } from '../features/restaurant/restaurantSlice';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import Debug from '../components/Debug';
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -148,6 +149,7 @@ const Home: React.FC = () => {
           </div>
         )}
       </div>
+      <Debug />
     </div>
   );
 };

@@ -16,10 +16,10 @@ export const API_CONFIG = {
     CHANGE_PASSWORD: '/auth/change-password',
     
     // Restaurants
-    RESTAURANTS: '/restaurants',
-    RESTAURANT_DETAIL: '/restaurants/:id',
-    RESTAURANT_MENUS: '/restaurants/:id/menus',
-    RESTAURANT_REVIEWS: '/restaurants/:id/reviews',
+    RESTAURANTS: '/api/resto',
+    RESTAURANT_DETAIL: '/api/resto/:id',
+    RESTAURANT_MENUS: '/api/resto/:id/menus',
+    RESTAURANT_REVIEWS: '/api/resto/:id/reviews',
     
     // Menu
     MENUS: '/menus',

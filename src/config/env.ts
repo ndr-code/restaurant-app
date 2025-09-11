@@ -1,7 +1,7 @@
 // Environment variables with type safety and defaults
 export const env = {
   // API Configuration
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://be-restaurant-app-for-mentee-b6yxog5fk.vercel.app',
   API_TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT || '10000'),
   
   // App Configuration

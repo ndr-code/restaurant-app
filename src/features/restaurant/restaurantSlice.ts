@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../services/api/axios';
+import { API_CONFIG } from '../../config/api';
 import type { 
   Restaurant, 
   RestaurantDetail, 
@@ -21,22 +23,17 @@ export const fetchRestaurants = createAsyncThunk(
       if (filters.page) queryParams.append('page', filters.page.toString());
       if (filters.limit) queryParams.append('limit', filters.limit.toString());
 
-      const response = await fetch(`/api/resto?${queryParams.toString()}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-
-      const data: ApiResponse<{ restaurants: Restaurant[]; pagination: PaginationMeta }> = await response.json();
+      const response = await api.get(`${API_CONFIG.ENDPOINTS.RESTAURANTS}?${queryParams.toString()}`);
+      const data: ApiResponse<{ restaurants: Restaurant[]; pagination: PaginationMeta }> = response.data;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data;
-    } catch {
-      return rejectWithValue('Network error occurred');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Network error occurred';
+      return rejectWithValue(message);
     }
   }
 );
@@ -45,29 +42,17 @@ export const fetchRecommendedRestaurants = createAsyncThunk(
   'restaurant/fetchRecommendedRestaurants',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch('/api/resto/recommended', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      const data: ApiResponse<{ restaurants: Restaurant[] }> = await response.json();
+      const response = await api.get('/api/resto/recommended');
+      const data: ApiResponse<{ restaurants: Restaurant[] }> = response.data;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data.restaurants;
-    } catch {
-      return rejectWithValue('Network error occurred');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Network error occurred';
+      return rejectWithValue(message);
     }
   }
 );
@@ -81,22 +66,17 @@ export const fetchRestaurantDetail = createAsyncThunk(
       if (limitMenu) queryParams.append('limitMenu', limitMenu.toString());
       if (limitReview) queryParams.append('limitReview', limitReview.toString());
 
-      const response = await fetch(`/api/resto/${id}?${queryParams.toString()}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
-
-      const data: ApiResponse<{ restaurant: RestaurantDetail }> = await response.json();
+      const response = await api.get(`/api/resto/${id}?${queryParams.toString()}`);
+      const data: ApiResponse<{ restaurant: RestaurantDetail }> = response.data;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data.restaurant;
-    } catch {
-      return rejectWithValue('Network error occurred');
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Network error occurred';
+      return rejectWithValue(message);
     }
   }
 );

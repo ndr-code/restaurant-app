@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../services/api/axios';
 import type { 
   CartItem, 
   Cart, 
@@ -6,36 +7,30 @@ import type {
   ApiResponse 
 } from '../../types/api';
 
+// Helper function for error handling
+const handleAsyncError = (error: unknown): string => {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const axiosError = error as { response?: { data?: { message?: string } } };
+    return axiosError.response?.data?.message || 'Network error occurred';
+  }
+  return 'Network error occurred';
+};
+
 // Async thunks
 export const addToCart = createAsyncThunk(
   'cart/addToCart',
   async (cartData: AddToCartRequest, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch('/api/cart', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(cartData),
-      });
-
-      const data: ApiResponse<{ cartItem: CartItem }> = await response.json();
+      const response = await api.post<ApiResponse<{ cartItem: CartItem }>>('/api/cart', cartData);
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data.cartItem;
-    } catch {
-      return rejectWithValue('Network error occurred');
+    } catch (error) {
+      return rejectWithValue(handleAsyncError(error));
     }
   }
 );
@@ -44,28 +39,19 @@ export const fetchCart = createAsyncThunk(
   'cart/fetchCart',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch('/api/cart', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      const data: ApiResponse<Cart> = await response.json();
+      const response = await api.get<ApiResponse<Cart>>('/api/cart');
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data;
-    } catch {
+    } catch (error) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+      }
       return rejectWithValue('Network error occurred');
     }
   }
@@ -75,31 +61,16 @@ export const updateCartItem = createAsyncThunk(
   'cart/updateCartItem',
   async ({ cartItemId, quantity }: { cartItemId: number; quantity: number }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch(`/api/cart/${cartItemId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ quantity }),
-      });
-
-      const data: ApiResponse<{ cartItem: CartItem }> = await response.json();
+      const response = await api.put<ApiResponse<{ cartItem: CartItem }>>(`/api/cart/${cartItemId}`, { quantity });
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data.cartItem;
-    } catch {
-      return rejectWithValue('Network error occurred');
+    } catch (error) {
+      return rejectWithValue(handleAsyncError(error));
     }
   }
 );
@@ -108,29 +79,16 @@ export const removeCartItem = createAsyncThunk(
   'cart/removeCartItem',
   async (cartItemId: number, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch(`/api/cart/${cartItemId}`, {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      const data: ApiResponse<{ message: string }> = await response.json();
+      const response = await api.delete<ApiResponse<{ message: string }>>(`/api/cart/${cartItemId}`);
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return cartItemId;
-    } catch {
-      return rejectWithValue('Network error occurred');
+    } catch (error) {
+      return rejectWithValue(handleAsyncError(error));
     }
   }
 );
@@ -139,29 +97,16 @@ export const clearCart = createAsyncThunk(
   'cart/clearCart',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch('/api/cart', {
-        method: 'DELETE',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      const data: ApiResponse<{ message: string }> = await response.json();
+      const response = await api.delete<ApiResponse<{ message: string }>>('/api/cart');
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
-      return data.message;
-    } catch {
-      return rejectWithValue('Network error occurred');
+      return data.data.message;
+    } catch (error) {
+      return rejectWithValue(handleAsyncError(error));
     }
   }
 );

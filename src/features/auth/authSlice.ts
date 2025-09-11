@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import api from '../../services/api/axios';
 import type { 
   User, 
   LoginRequest, 
@@ -14,16 +15,8 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials: LoginRequest, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      const data: ApiResponse<LoginResponse> = await response.json();
+      const response = await api.post<ApiResponse<LoginResponse>>('/api/auth/login', credentials);
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
@@ -33,7 +26,11 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('jwt_token', data.data.token);
 
       return data.data;
-    } catch {
+    } catch (error) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+      }
       return rejectWithValue('Network error occurred');
     }
   }
@@ -43,23 +40,19 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (userData: RegisterRequest, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      const data: ApiResponse<{ user: User }> = await response.json();
+      const response = await api.post<ApiResponse<{ user: User }>>('/api/auth/register', userData);
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data.user;
-    } catch {
+    } catch (error) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+      }
       return rejectWithValue('Network error occurred');
     }
   }
@@ -69,28 +62,19 @@ export const fetchProfile = createAsyncThunk(
   'auth/fetchProfile',
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch('/api/auth/profile', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      const data: ApiResponse<User> = await response.json();
+      const response = await api.get<ApiResponse<User>>('/api/auth/profile');
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data;
-    } catch {
+    } catch (error) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+      }
       return rejectWithValue('Network error occurred');
     }
   }
@@ -100,30 +84,19 @@ export const updateProfile = createAsyncThunk(
   'auth/updateProfile',
   async (profileData: UpdateProfileRequest, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
-
-      const response = await fetch('/api/auth/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(profileData),
-      });
-
-      const data: ApiResponse<User> = await response.json();
+      const response = await api.put<ApiResponse<User>>('/api/auth/profile', profileData);
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
       return data.data;
-    } catch {
+    } catch (error) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+      }
       return rejectWithValue('Network error occurred');
     }
   }
@@ -133,30 +106,20 @@ export const changePassword = createAsyncThunk(
   'auth/changePassword',
   async (passwordData: ChangePasswordRequest, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('jwt_token');
-      
-      if (!token) {
-        return rejectWithValue('No token found');
-      }
 
-      const response = await fetch('/api/auth/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(passwordData),
-      });
-
-      const data: ApiResponse<{ message: string }> = await response.json();
+      const response = await api.put<ApiResponse<{ message: string }>>('/api/auth/profile', passwordData);
+      const { data } = response;
 
       if (!data.success) {
         return rejectWithValue(data.message);
       }
 
-      return data.message;
-    } catch {
+      return data.data.message;
+    } catch (error) {
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+      }
       return rejectWithValue('Network error occurred');
     }
   }

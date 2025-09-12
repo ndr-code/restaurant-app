@@ -1,0 +1,183 @@
+{
+  "files.exclude": {
+    // Node.js & Package Manager
+    "**/node_modules": true,
+    "**/package-lock.json": true,
+    "**/yarn.lock": false,
+    "**/pnpm-lock.yaml": false,
+
+    // Build & Distribution
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/out": true,
+
+    // Version Control
+    "**/.git": true,
+    "**/.gitignore": false,
+
+    // TypeScript Config Files
+    "**/tsconfig.*.json": true,
+    "**/tsconfig.json": false,
+
+    // Logs & Debug Files
+    "**/*.log": true,
+    "**/logs": true,
+    "**/npm-debug.log*": true,
+    "**/yarn-debug.log*": true,
+    "**/yarn-error.log*": true,
+    "**/pnpm-debug.log*": true,
+    "**/lerna-debug.log*": true,
+
+    // Cache & Temporary Files
+    "**/.cache": true,
+    "**/.temp": true,
+    "**/.tmp": true,
+    "**/tmp": true,
+    "**/*.tmp": true,
+    "**/*.temp": true,
+
+    // OS Generated Files
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/desktop.ini": true,
+    "**/.Spotlight-V100": true,
+    "**/.Trashes": true,
+    "**/ehthumbs.db": true,
+    "**/ehthumbs_vista.db": true,
+
+    // Editor & IDE Files
+    "**/.vscode/settings.json": false,
+    "**/.vscode/tasks.json": false,
+    "**/.vscode/launch.json": false,
+    "**/.vscode/extensions.json": false,
+    "**/.idea": true,
+    "**/*.swp": true,
+    "**/*.swo": true,
+    "**/.vim": true,
+    "**/.vimrc": true,
+
+    // Coverage & Testing
+    "**/coverage": true,
+    "**/.nyc_output": true,
+    "**/test-results": true,
+    "**/playwright-report": true,
+
+    // Dependency & Lock Files
+    "**/bower_components": true,
+    "**/jspm_packages": true,
+
+    // Webpack & Build Tools
+    "**/.webpack": true,
+    "**/webpack-stats.json": true,
+
+    // Tailwind CSS Generated Files
+    "**/tailwind.css.map": true,
+
+    // React & Vite Specific
+    "**/.vite": true,
+    "**/vite.config.*.timestamp-*": true,
+
+    // Redux DevTools
+    "**/redux-devtools-extension": true,
+
+    // Documentation (keep visible but can hide if needed)
+    "**/README.md": false,
+    "**/CHANGELOG.md": false,
+    "**/LICENSE": false,
+    "**/APICONTRACT.md": false,
+
+    // Config Files (keep main ones visible)
+    "**/package.json": false,
+    "**/vite.config.ts": false,
+    "**/tailwind.config.js": false,
+    "**/postcss.config.js": false,
+    "**/components.json": false,
+    "**/eslint.config.js": false,
+
+    // Source Maps (hide untuk cleaner view)
+    "**/*.js.map": true,
+    "**/*.css.map": true,
+
+    // Backup Files
+    "**/*.bak": true,
+    "**/*.backup": true,
+    "**/*~": true
+  },
+
+  // Explorer Settings
+  "explorer.compactFolders": false,
+  "explorer.sortOrder": "type",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js, ${capture}.d.ts, ${capture}.js.map",
+    "*.tsx": "${capture}.js, ${capture}.jsx, ${capture}.d.ts",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml",
+    ".env": ".env.*, .env.example",
+    "tailwind.config.js": "postcss.config.js",
+    "vite.config.ts": "vite.config.*.ts",
+    "tsconfig.json": "tsconfig.*.json"
+  },
+
+  // File Associations
+  "files.associations": {
+    "*.css": "tailwindcss",
+    ".env*": "properties"
+  },
+
+  // Auto Save
+  "files.autoSave": "onFocusChange",
+
+  // Tailwind CSS IntelliSense
+  "tailwindCSS.includeLanguages": {
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+
+  // TypeScript Settings
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+
+  // React Settings
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "typescriptreact": "html"
+  },
+  "emmet.triggerExpansionOnTab": true,
+
+  // Prettier & Formatting Settings
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.addMissingImports": "explicit"
+  },
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "prettier.jsxSingleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.arrowParens": "always",
+
+  // Language Specific Formatters
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // TypeScript SDK
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

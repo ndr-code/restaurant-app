@@ -3,4 +3,4 @@ export { default as authReducer } from './authSlice';
 export { default as cartReducer } from './cartSlice';  
 export { default as orderReducer } from './orderSlice';
 export { default as reviewReducer } from './reviewSlice';
-export { default as restaurantUIReducer } from './restaurantUISlice';
+export { default as restaurantUIReducer } from './restaurantSlice';

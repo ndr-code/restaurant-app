@@ -5,7 +5,7 @@ import {
   setFilters, 
   setCurrentPage, 
   selectFilters, 
-} from '@/features/restaurant/restaurantUISlice';
+} from '@/store/slices/restaurantSlice';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 

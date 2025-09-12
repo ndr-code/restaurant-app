@@ -1,12 +1,12 @@
-import { useAppSelector, useAppDispatch } from '../../store';
+import { useAppSelector, useAppDispatch } from '../store';
 import { 
   addToCart, 
   fetchCart, 
   updateCartItem, 
   removeCartItem, 
   clearCart 
-} from './cartSlice';
-import type { AddToCartRequest } from '../../types/api';
+} from '../store/slices/cartSlice';
+import type { AddToCartRequest } from '../types/api';
 
 export const useCart = () => {
   const dispatch = useAppDispatch();

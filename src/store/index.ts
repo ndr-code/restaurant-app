@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-// Import reducers from features
-import { authReducer } from '@/features/auth';
-import { cartReducer } from '@/features/cart';
-import { orderReducer } from '@/features/order';
-import { reviewReducer } from '@/features/review';
-import restaurantUIReducer from '@/features/restaurant/restaurantUISlice';
+// Import reducers from store/slices
+import { 
+  authReducer,
+  cartReducer,
+  orderReducer,
+  reviewReducer,
+  restaurantUIReducer
+} from './slices';
 
 export const store = configureStore({
   reducer: {

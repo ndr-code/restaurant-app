@@ -1,4 +1,4 @@
-import { useAppSelector } from '../store';
+import { useAppSelector } from './index';
 
 // Auth selectors
 export const useAuth = () => {
@@ -89,7 +89,6 @@ export const useReviews = () => {
     restaurantReviewsError: review.restaurantReviewsError,
     myReviews: review.myReviews,
     myReviewsPagination: review.myReviewsPagination,
-    myReviewsSummary: review.myReviewsSummary,
     isMyReviewsLoading: review.isMyReviewsLoading,
     myReviewsError: review.myReviewsError,
     isCreatingReview: review.isCreatingReview,
@@ -137,9 +136,8 @@ export const useRestaurantReviews = (restaurantId: number) => {
   const error = useAppSelector((state) => state.review.restaurantReviewsError);
   
   return {
-    reviews: restaurantReviews?.reviews || [],
-    pagination: restaurantReviews?.pagination || null,
-    summary: restaurantReviews?.summary || null,
+    reviews: restaurantReviews || [],
+    pagination: useAppSelector((state) => state.review.restaurantReviewsPagination[restaurantId]) || null,
     isLoading,
     error,
   };

@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from '../../store';
+import { useAppSelector, useAppDispatch } from '../store';
 import { 
   loginUser, 
   registerUser, 
@@ -6,13 +6,13 @@ import {
   fetchProfile, 
   updateProfile, 
   changePassword 
-} from './authSlice';
+} from '../store/slices/authSlice';
 import type { 
   LoginRequest, 
   RegisterRequest, 
   UpdateProfileRequest, 
   ChangePasswordRequest 
-} from '../../types/api';
+} from '../types/api';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();

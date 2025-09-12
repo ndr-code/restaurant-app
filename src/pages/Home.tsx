@@ -1,11 +1,11 @@
 import React from 'react';
-import AllRestaurants from '../components/AllRestaurants';
+import Navbar from '../components/Navbar';
 
 const Home: React.FC = () => {
   return (
     <div>
-      {/* Main Restaurant Component */}
-      <AllRestaurants />
+      
+      <Navbar />
     </div>
   );
 };

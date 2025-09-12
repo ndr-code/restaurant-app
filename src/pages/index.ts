@@ -3,7 +3,6 @@ export { default as Home } from './Home';
 export { default as Restaurants } from './Restaurants';
 export { default as Restaurant } from './Restaurant';
 export { default as Search } from './Search';
-export { default as About } from './About';
 export { default as Contact } from './Contact';
 export { default as Help } from './Help';
 

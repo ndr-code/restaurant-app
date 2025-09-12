@@ -4,7 +4,7 @@ import Hero from '../components/Hero';
 
 const Home: React.FC = () => {
   return (
-    <div>
+    <div className='relative'>
       <Navbar />
       <Hero />
     </div>

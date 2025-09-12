@@ -1,16 +1,16 @@
 function Hero() {
   return (
     <div
-      className='relative p-8 shadow-lg flex flex-col items-center justify-center space-y-4 min-h-screen bg-cover bg-center bg-no-repeat'
+      className='relative flex min-h-screen flex-col items-center justify-center space-y-4 bg-cover bg-center bg-no-repeat p-8 shadow-lg'
       style={{ backgroundImage: "url('/hero-background.png')" }}
     >
       <div className='absolute inset-0 bg-black/60'></div>
 
       <div className='relative z-10'>
-        <h1 className='text-white text-center text-2xl font-extrabold'>
+        <h1 className='display-2xl-extrabold mb-2 text-center text-neutral-50'>
           Explore Culinary Experiences
         </h1>
-        <p className='text-white text-center text-lg'>
+        <p className='display-xs-bold text-neutral-50'>
           Search and refine your choice to discover the perfect restaurant.
         </p>
       </div>

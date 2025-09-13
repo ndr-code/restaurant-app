@@ -1,13 +1,17 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
 import api from '../../services/api/axios';
-import type { 
-  User, 
-  LoginRequest, 
-  RegisterRequest, 
-  LoginResponse, 
-  UpdateProfileRequest, 
+import type {
+  User,
+  LoginRequest,
+  RegisterRequest,
+  LoginResponse,
+  UpdateProfileRequest,
   ChangePasswordRequest,
-  ApiResponse 
+  ApiResponse,
 } from '../../types/api';
 
 // Async thunks for API calls
@@ -15,7 +19,10 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials: LoginRequest, { rejectWithValue }) => {
     try {
-      const response = await api.post<ApiResponse<LoginResponse>>('/api/auth/login', credentials);
+      const response = await api.post<ApiResponse<LoginResponse>>(
+        '/api/auth/login',
+        credentials
+      );
       const { data } = response;
 
       if (!data.success) {
@@ -28,8 +35,12 @@ export const loginUser = createAsyncThunk(
       return data.data;
     } catch (error) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
-        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
+        return rejectWithValue(
+          axiosError.response?.data?.message || 'Network error occurred'
+        );
       }
       return rejectWithValue('Network error occurred');
     }
@@ -40,7 +51,10 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (userData: RegisterRequest, { rejectWithValue }) => {
     try {
-      const response = await api.post<ApiResponse<{ user: User }>>('/api/auth/register', userData);
+      const response = await api.post<ApiResponse<{ user: User }>>(
+        '/api/auth/register',
+        userData
+      );
       const { data } = response;
 
       if (!data.success) {
@@ -50,8 +64,12 @@ export const registerUser = createAsyncThunk(
       return data.data.user;
     } catch (error) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
-        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
+        return rejectWithValue(
+          axiosError.response?.data?.message || 'Network error occurred'
+        );
       }
       return rejectWithValue('Network error occurred');
     }
@@ -72,8 +90,12 @@ export const fetchProfile = createAsyncThunk(
       return data.data;
     } catch (error) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
-        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
+        return rejectWithValue(
+          axiosError.response?.data?.message || 'Network error occurred'
+        );
       }
       return rejectWithValue('Network error occurred');
     }
@@ -84,7 +106,10 @@ export const updateProfile = createAsyncThunk(
   'auth/updateProfile',
   async (profileData: UpdateProfileRequest, { rejectWithValue }) => {
     try {
-      const response = await api.put<ApiResponse<User>>('/api/auth/profile', profileData);
+      const response = await api.put<ApiResponse<User>>(
+        '/api/auth/profile',
+        profileData
+      );
       const { data } = response;
 
       if (!data.success) {
@@ -94,8 +119,12 @@ export const updateProfile = createAsyncThunk(
       return data.data;
     } catch (error) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
-        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
+        return rejectWithValue(
+          axiosError.response?.data?.message || 'Network error occurred'
+        );
       }
       return rejectWithValue('Network error occurred');
     }
@@ -106,8 +135,10 @@ export const changePassword = createAsyncThunk(
   'auth/changePassword',
   async (passwordData: ChangePasswordRequest, { rejectWithValue }) => {
     try {
-
-      const response = await api.put<ApiResponse<{ message: string }>>('/api/auth/profile', passwordData);
+      const response = await api.put<ApiResponse<{ message: string }>>(
+        '/api/auth/profile',
+        passwordData
+      );
       const { data } = response;
 
       if (!data.success) {
@@ -117,10 +148,56 @@ export const changePassword = createAsyncThunk(
       return data.data.message;
     } catch (error) {
       if (error && typeof error === 'object' && 'response' in error) {
-        const axiosError = error as { response?: { data?: { message?: string } } };
-        return rejectWithValue(axiosError.response?.data?.message || 'Network error occurred');
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
+        return rejectWithValue(
+          axiosError.response?.data?.message || 'Network error occurred'
+        );
       }
       return rejectWithValue('Network error occurred');
+    }
+  }
+);
+
+// Thunk to initialize auth state from localStorage
+export const initializeAuth = createAsyncThunk(
+  'auth/initializeAuth',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('jwt_token');
+
+      if (!token) {
+        return rejectWithValue('No token found');
+      }
+
+      // If token exists, fetch user profile to validate and get user data
+      const response = await api.get<ApiResponse<User>>('/api/auth/profile');
+      const { data } = response;
+
+      if (!data.success) {
+        // Token is invalid, clear it
+        localStorage.removeItem('jwt_token');
+        return rejectWithValue(data.message);
+      }
+
+      return {
+        token,
+        user: data.data,
+      };
+    } catch (error) {
+      // Token is invalid, clear it
+      localStorage.removeItem('jwt_token');
+
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as {
+          response?: { data?: { message?: string } };
+        };
+        return rejectWithValue(
+          axiosError.response?.data?.message || 'Token validation failed'
+        );
+      }
+      return rejectWithValue('Token validation failed');
     }
   }
 );
@@ -199,7 +276,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.error = action.payload as string;
       })
-      
+
       // Register cases
       .addCase(registerUser.pending, (state) => {
         state.isRegisterLoading = true;
@@ -213,7 +290,7 @@ const authSlice = createSlice({
         state.isRegisterLoading = false;
         state.registerError = action.payload as string;
       })
-      
+
       // Fetch profile cases
       .addCase(fetchProfile.pending, (state) => {
         state.isProfileLoading = true;
@@ -228,14 +305,17 @@ const authSlice = createSlice({
         state.isProfileLoading = false;
         state.profileError = action.payload as string;
         // If token is invalid, logout user
-        if (action.payload === 'No token found' || action.payload === 'Unauthorized') {
+        if (
+          action.payload === 'No token found' ||
+          action.payload === 'Unauthorized'
+        ) {
           state.user = null;
           state.token = null;
           state.isAuthenticated = false;
           localStorage.removeItem('jwt_token');
         }
       })
-      
+
       // Update profile cases
       .addCase(updateProfile.pending, (state) => {
         state.isProfileLoading = true;
@@ -250,7 +330,7 @@ const authSlice = createSlice({
         state.isProfileLoading = false;
         state.profileError = action.payload as string;
       })
-      
+
       // Change password cases
       .addCase(changePassword.pending, (state) => {
         state.isPasswordChanging = true;
@@ -263,6 +343,25 @@ const authSlice = createSlice({
       .addCase(changePassword.rejected, (state, action) => {
         state.isPasswordChanging = false;
         state.passwordChangeError = action.payload as string;
+      })
+
+      // Initialize auth cases
+      .addCase(initializeAuth.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(initializeAuth.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isAuthenticated = true;
+        state.error = null;
+      })
+      .addCase(initializeAuth.rejected, (state) => {
+        state.isLoading = false;
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        // Don't set error for initialization failure - it's expected when no token exists
       });
   },
 });

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, useScroll, useMotionValueEvent } from 'motion/react';
-import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import { ROUTES } from '../../config/routes';
 import { buttonVariants } from '../ui/button-variants';
 import {
@@ -11,16 +11,12 @@ import {
   getSignUpButtonHoverStyles,
   buttonAnimations,
 } from '../ui/navbar-button-utils';
-import type { RootState } from '../../store';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
-  // Get auth state from Redux
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
   const handleSignIn = () => {
@@ -90,9 +86,7 @@ function Navbar() {
           </motion.div>
         </Link>
         <div className='flex flex-row items-center gap-4'>
-          {/* Conditional rendering based on Redux auth state */}
           {isAuthenticated ? (
-            // Logged in state - Avatar and Username
             <>
               {/* Cart Icon */}
               <motion.div
@@ -115,6 +109,7 @@ function Navbar() {
                   }}
                 />
               </motion.div>
+              {/* Avatar and Username */}
               <motion.div
                 className='flex cursor-pointer items-center justify-center'
                 whileHover={{

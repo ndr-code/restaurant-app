@@ -1,7 +1,11 @@
+import { useEffect } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { queryClient } from '@/lib/react-query';
+import { initializeAuth } from '@/store/slices/authSlice';
+import type { AppDispatch } from '@/store';
 import { ROUTES } from '@/config/routes';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
@@ -16,6 +20,13 @@ import Help from '@/pages/Help';
 import Checkout from '@/pages/Checkout';
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>();
+
+  // Initialize auth state from localStorage on app startup
+  useEffect(() => {
+    dispatch(initializeAuth());
+  }, [dispatch]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>

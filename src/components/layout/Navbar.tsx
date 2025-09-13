@@ -10,7 +10,8 @@ import {
   getSignUpButtonStyles,
   getSignUpButtonHoverStyles,
   buttonAnimations,
-} from '../ui/navbar-button-utils';
+} from './navbar-button-utils';
+import Logout from '../Logout';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -138,6 +139,13 @@ function Navbar() {
               >
                 {user?.name || 'User'}
               </motion.div>
+
+              {/* Logout Button */}
+              <Logout
+                variant='navbar-logout'
+                isScrolled={isScrolled}
+                className='ml-2'
+              />
             </>
           ) : (
             // Logged out state - Sign In and Sign Up buttons

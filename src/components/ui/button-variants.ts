@@ -20,6 +20,8 @@ export const buttonVariants = cva(
           'rounded-full px-10 py-2 text-sm font-semibold transition-all duration-200 bg-transparent border',
         'navbar-signup':
           'rounded-full px-10 py-2 text-sm font-semibold shadow-md transition-all duration-200',
+        'navbar-logout':
+          'rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 hover:bg-destructive/10',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

@@ -1,7 +1,7 @@
 function Hero() {
   return (
     <div
-      className='relative flex min-h-screen flex-col items-center justify-center space-y-4 bg-cover bg-center bg-no-repeat p-8 pt-20 shadow-lg'
+      className='relative flex h-screen flex-col items-center justify-center space-y-4 bg-cover bg-center bg-no-repeat p-8 pt-20 shadow-lg'
       style={{ backgroundImage: "url('/images/hero-background.png')" }}
     >
       <div className='absolute inset-0 h-full bg-black/60'></div>

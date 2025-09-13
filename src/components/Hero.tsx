@@ -1,3 +1,6 @@
+import { motion } from 'motion/react';
+import Searchbar from './Searchbar';
+
 function Hero() {
   return (
     <div
@@ -7,19 +10,33 @@ function Hero() {
       <div className='absolute inset-0 h-full bg-black/60'></div>
 
       <div className='relative z-10 text-center'>
-        <h1 className='display-2xl-extrabold mb-6 text-neutral-50'>
+        <motion.h1
+          className='display-2xl-extrabold mb-6 text-neutral-50'
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.2,
+            ease: 'easeOut',
+          }}
+        >
           Explore Culinary Experiences
-        </h1>
-        <p className='display-xs-bold mb-8 text-neutral-50'>
-          Search and refine your choice to discover the perfect restaurant.
-        </p>
+        </motion.h1>
 
-        {/* Optional: Add a search bar or CTA button */}
-        <div className='flex justify-center'>
-          <button className='bg-primary hover:bg-primary-600 text-primary-foreground rounded-lg px-8 py-3 font-semibold transition-colors'>
-            Start Exploring
-          </button>
-        </div>
+        <motion.p
+          className='display-xs-bold mb-8 text-neutral-50'
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.6,
+            delay: 0.4,
+            ease: 'easeOut',
+          }}
+        >
+          Search and refine your choice to discover the perfect restaurant.
+        </motion.p>
+
+        <Searchbar />
       </div>
     </div>
   );

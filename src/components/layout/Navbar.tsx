@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { ROUTES } from '../config/routes';
-import { buttonVariants } from './ui/button-variants';
+import { ROUTES } from '../../config/routes';
+import { buttonVariants } from '../ui/button-variants';
 import {
   getSignInButtonStyles,
   getSignInButtonHoverStyles,
   getSignUpButtonStyles,
   getSignUpButtonHoverStyles,
   buttonAnimations,
-} from './ui/navbar-button-utils';
-import type { RootState } from '../store';
+} from '../ui/navbar-button-utils';
+import type { RootState } from '../../store';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

@@ -4,3 +4,4 @@ export * from './useCart';
 export * from './useOrders';
 export * from './useReviews';
 export * from './useRestaurantUI';
+export * from './useScreenSize';

@@ -12,6 +12,7 @@ import {
   buttonAnimations,
 } from './navbar-button-utils';
 import Logout from '../Logout';
+import MobileMenu from './mobile-menu';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -88,7 +89,8 @@ function Navbar() {
         </Link>
         <div className='flex flex-row items-center gap-4'>
           {isAuthenticated ? (
-            <>
+            // Authenticated state - Desktop only
+            <div className='hidden items-center gap-4 md:flex'>
               {/* Cart Icon */}
               <motion.div
                 className='flex cursor-pointer items-center justify-center'
@@ -146,10 +148,10 @@ function Navbar() {
                 isScrolled={isScrolled}
                 className='ml-2'
               />
-            </>
+            </div>
           ) : (
-            // Logged out state - Sign In and Sign Up buttons
-            <div className='flex items-center gap-3'>
+            // Logged out state - Sign In and Sign Up buttons (Desktop only)
+            <div className='hidden items-center gap-3 md:flex'>
               <motion.button
                 onClick={handleSignIn}
                 className={buttonVariants({ variant: 'navbar-signin' })}
@@ -173,6 +175,9 @@ function Navbar() {
               </motion.button>
             </div>
           )}
+
+          {/* Mobile Menu */}
+          <MobileMenu isScrolled={isScrolled} />
         </div>
       </motion.div>
     </motion.nav>

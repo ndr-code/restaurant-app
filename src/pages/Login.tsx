@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { useAuth } from '../hooks/useAuth';
 import { ROUTES } from '../config/routes';
-import { rememberMeUtils } from '../utils/rememberMe';
+import { rememberMeUtils } from '../lib/rememberMe';
 import type { LoginRequest } from '../types/api';
 
 const Login: React.FC = () => {

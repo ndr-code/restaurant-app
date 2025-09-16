@@ -7,7 +7,7 @@ import {
   updateProfile,
   changePassword,
 } from '../store/slices/authSlice';
-import { rememberMeUtils } from '../utils/rememberMe';
+import { rememberMeUtils } from '../lib/rememberMe';
 import type {
   LoginRequest,
   RegisterRequest,

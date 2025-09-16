@@ -7,7 +7,7 @@ import { queryClient } from '@/lib/react-query';
 import { initializeAuth } from '@/store/slices/authSlice';
 import type { AppDispatch } from '@/store';
 import { ROUTES } from '@/config/routes';
-import { rememberMeUtils } from '@/utils/rememberMe';
+import { rememberMeUtils } from '@/lib/rememberMe';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';

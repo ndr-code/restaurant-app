@@ -30,14 +30,7 @@ export const DesktopNavIcons = () => {
   const navigate = useNavigate();
 
   const navigationItems = [
-    { icon: MenuIcons.Home, route: ROUTES.HOME, label: 'Home' },
-    {
-      icon: MenuIcons.Restaurant,
-      route: ROUTES.RESTAURANTS,
-      label: 'Restaurants',
-    },
     { icon: MenuIcons.Cart, route: ROUTES.CART, label: 'Cart' },
-    { icon: MenuIcons.Orders, route: ROUTES.ORDERS, label: 'Orders' },
   ];
 
   return (

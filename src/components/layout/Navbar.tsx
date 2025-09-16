@@ -13,15 +13,14 @@ import {
 } from './navbar-button-utils';
 
 import MobileMenu from './mobile-menu';
-import Logout from '../logout';
-import { AvatarWithInitials } from '../ui/avatar';
+import DesktopMenu from './desktop-menu';
 import { DesktopNavIcons } from './desktop-nav-icons';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const handleSignIn = () => {
@@ -93,45 +92,11 @@ function Navbar() {
         </Link>
         <div className='flex flex-row items-center gap-4'>
           {isAuthenticated ? (
-            // Authenticated state - Desktop only
-            <div className='hidden items-center gap-3 md:flex'>
-              {/* Navigation Icons */}
+            // Authenticated state - Desktop dropdown menu
+            <>
               <DesktopNavIcons />
-              {/* Avatar and Username */}
-              <motion.div
-                className='flex cursor-pointer items-center justify-center'
-                whileHover={{
-                  scale: 1.1,
-                }}
-                transition={{ type: 'spring', stiffness: 400 }}
-              >
-                <AvatarWithInitials
-                  src={user?.avatar}
-                  alt={user?.name || 'Avatar'}
-                  name={user?.name}
-                  size='lg'
-                  className='shadow-lg'
-                />
-              </motion.div>
-
-              <motion.div
-                className='text-lg-semibold cursor-pointer'
-                whileHover={{
-                  scale: 1.1,
-                  color: 'var(--primary)',
-                }}
-                transition={{ type: 'spring', stiffness: 400 }}
-              >
-                {user?.name || 'User'}
-              </motion.div>
-
-              {/* Logout Button */}
-              <Logout
-                variant='navbar-logout'
-                isScrolled={isScrolled}
-                className='ml-2'
-              />
-            </div>
+              <DesktopMenu isScrolled={isScrolled} />
+            </>
           ) : (
             // Logged out state - Sign In and Sign Up buttons (Desktop only)
             <div className='hidden items-center gap-3 md:flex'>

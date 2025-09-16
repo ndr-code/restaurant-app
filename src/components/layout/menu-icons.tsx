@@ -1,7 +1,6 @@
 import {
   Home,
   UtensilsCrossed,
-  ShoppingCart,
   ClipboardList,
   LogIn,
   UserPlus,
@@ -25,7 +24,11 @@ export const MenuIcons = {
 
   Cart: () => (
     <div className='mr-2 flex h-5 w-5 items-center justify-center rounded-full shadow-sm'>
-      <ShoppingCart className='h-4 w-4 drop-shadow-sm' />
+      <img
+        src='/icons/cart.svg'
+        alt='Cart'
+        className='h-7 w-7 drop-shadow-sm sm:h-8 sm:w-8'
+      />
     </div>
   ),
 

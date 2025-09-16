@@ -1,11 +1,10 @@
 import { motion } from 'motion/react';
-import Searchbar from './Searchbar';
 import { useScreenSize } from '@/hooks';
+import Searchbar from './searchbar';
 
 function Hero() {
   const { isAtLeast } = useScreenSize();
 
-  // Dynamic text size berdasarkan breakpoint
   const getTitleSize = () => {
     if (isAtLeast('sm')) return 'display-2xl-extrabold';
     return 'display-lg-extrabold';

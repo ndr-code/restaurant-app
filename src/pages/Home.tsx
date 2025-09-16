@@ -1,7 +1,7 @@
 import React from 'react';
-import Navbar from '../components/layout/Navbar';
-import Hero from '../components/home/Hero';
-import Footer from '../components/layout/Footer';
+import Navbar from '../components/layout/navbar';
+import Hero from '../components/home/hero';
+import Footer from '../components/layout/footer';
 
 const Home: React.FC = () => {
   return (

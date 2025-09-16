@@ -11,8 +11,9 @@ import {
   getSignUpButtonHoverStyles,
   buttonAnimations,
 } from './navbar-button-utils';
-import Logout from '../Logout';
+
 import MobileMenu from './mobile-menu';
+import Logout from '../logout';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

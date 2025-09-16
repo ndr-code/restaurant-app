@@ -39,7 +39,7 @@ function MobileMenu({ isScrolled = false }: MobileMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <motion.button
-            className='focus:ring-primary flex items-center justify-center rounded-md p-2 focus:ring-2 focus:outline-none'
+            className='flex items-center justify-center rounded-md focus:ring-0 focus:outline-none'
             style={{
               color: isScrolled ? 'var(--foreground)' : 'var(--base-white)',
             }}
@@ -63,7 +63,7 @@ function MobileMenu({ isScrolled = false }: MobileMenuProps) {
               </motion.div>
             ) : (
               <svg
-                className='h-6 w-6'
+                className='h-10 w-10'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'

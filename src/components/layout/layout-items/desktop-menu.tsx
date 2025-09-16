@@ -41,7 +41,7 @@ function DesktopMenu({ isScrolled = false }: DesktopMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <motion.button
-            className='focus:ring-primary flex items-center gap-3 space-x-2 rounded-md px-3 py-2 focus:ring-2 focus:outline-none'
+            className='flex items-center gap-3 space-x-2 rounded-md px-3 py-2 focus:outline-none focus:ring-0'
             style={{
               color: isScrolled ? 'var(--foreground)' : 'var(--base-white)',
             }}
@@ -70,7 +70,6 @@ function DesktopMenu({ isScrolled = false }: DesktopMenuProps) {
               className='text-lg-semibold cursor-pointer'
               whileHover={{
                 scale: 1.1,
-                color: 'var(--primary)',
               }}
               transition={{ type: 'spring', stiffness: 400 }}
             >

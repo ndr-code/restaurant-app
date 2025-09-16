@@ -90,11 +90,11 @@ function Navbar() {
             Foody
           </motion.div>
         </Link>
-        <div className='flex flex-row items-center gap-1'>
+        <div className='flex flex-row items-center gap-3'>
           {isAuthenticated ? (
             // Authenticated state - Desktop dropdown menu
             <>
-              <CartIcons />
+              <CartIcons isScrolled={isScrolled} />
               <DesktopMenu isScrolled={isScrolled} />
             </>
           ) : (

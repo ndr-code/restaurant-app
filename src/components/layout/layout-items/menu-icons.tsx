@@ -22,12 +22,16 @@ export const MenuIcons = {
     </div>
   ),
 
-  Cart: () => (
+  Cart: ({} = {}) => (
     <div className='mr-2 flex h-5 w-5 items-center justify-center rounded-full shadow-sm'>
       <img
         src='/icons/cart.svg'
         alt='Cart'
-        className='h-7 w-7 drop-shadow-sm sm:h-8 sm:w-8'
+        className='h-4 w-4 drop-shadow-sm'
+        style={{
+          filter:
+            'brightness(100) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)',
+        }}
       />
     </div>
   ),

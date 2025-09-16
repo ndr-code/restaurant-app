@@ -1,15 +1,14 @@
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { MenuIcons } from './menu-icons';
 import { ROUTES } from '../../../config/routes';
 
 interface NavIconProps {
-  icon: () => React.ReactElement;
+  icon: React.ReactElement;
   onClick: () => void;
   label: string;
 }
 
-const NavIcon = ({ icon: Icon, onClick, label }: NavIconProps) => (
+const NavIcon = ({ icon, onClick, label }: NavIconProps) => (
   <motion.div
     className='group relative flex cursor-pointer items-center justify-center'
     whileHover={{ scale: 1.1 }}
@@ -18,7 +17,7 @@ const NavIcon = ({ icon: Icon, onClick, label }: NavIconProps) => (
     onClick={onClick}
     title={label}
   >
-    <Icon />
+    {icon}
     {/* Tooltip */}
     <div className='pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 transform rounded bg-black/80 px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
       {label}
@@ -26,11 +25,26 @@ const NavIcon = ({ icon: Icon, onClick, label }: NavIconProps) => (
   </motion.div>
 );
 
-export const CartIcons = () => {
+export const CartIcons = ({ isScrolled }: { isScrolled?: boolean }) => {
   const navigate = useNavigate();
 
   const navigationItems = [
-    { icon: MenuIcons.Cart, route: ROUTES.CART, label: 'Cart' },
+    {
+      icon: (
+        <img
+          src='/icons/cart.svg'
+          alt='Cart'
+          className='h-5 w-5 drop-shadow-sm sm:h-6 sm:w-6'
+          style={{
+            filter: isScrolled
+              ? 'brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)'
+              : 'brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%)',
+          }}
+        />
+      ),
+      route: ROUTES.CART,
+      label: 'Cart',
+    },
   ];
 
   return (

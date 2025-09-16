@@ -14,6 +14,8 @@ import {
 
 import MobileMenu from './mobile-menu';
 import Logout from '../logout';
+import { AvatarWithInitials } from '../ui/avatar';
+import { DesktopNavIcons } from './DesktopNavIcons';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -77,8 +79,9 @@ function Navbar() {
               alt='Foody Logo'
               className='h-8 w-8'
               style={{
-                filter:
-                  'brightness(0) saturate(100%) invert(18%) sepia(97%) saturate(4456%) hue-rotate(354deg) brightness(95%) contrast(94%)',
+                filter: isScrolled
+                  ? 'brightness(0) saturate(100%) invert(18%) sepia(97%) saturate(4456%) hue-rotate(354deg) brightness(95%) contrast(94%)'
+                  : 'none',
               }}
               transition={{
                 duration: 0.3,
@@ -91,28 +94,9 @@ function Navbar() {
         <div className='flex flex-row items-center gap-4'>
           {isAuthenticated ? (
             // Authenticated state - Desktop only
-            <div className='hidden items-center gap-4 md:flex'>
-              {/* Cart Icon */}
-              <motion.div
-                className='flex cursor-pointer items-center justify-center'
-                whileHover={{
-                  scale: 1.1,
-                }}
-                transition={{ type: 'spring', stiffness: 400 }}
-              >
-                <motion.img
-                  src='/icons/cart.svg'
-                  alt='Cart'
-                  className='h-6 w-6'
-                  animate={{
-                    filter: isScrolled ? 'invert(1)' : 'invert(0)',
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    ease: 'easeInOut',
-                  }}
-                />
-              </motion.div>
+            <div className='hidden items-center gap-3 md:flex'>
+              {/* Navigation Icons */}
+              <DesktopNavIcons />
               {/* Avatar and Username */}
               <motion.div
                 className='flex cursor-pointer items-center justify-center'
@@ -121,14 +105,12 @@ function Navbar() {
                 }}
                 transition={{ type: 'spring', stiffness: 400 }}
               >
-                <motion.img
-                  src='/icons/ava.png'
-                  alt='Avatar'
-                  className='h-12 w-12 rounded-full object-cover shadow-lg'
-                  whileHover={{
-                    scale: 1.05,
-                  }}
-                  transition={{ type: 'spring', stiffness: 400 }}
+                <AvatarWithInitials
+                  src={user?.avatar}
+                  alt={user?.name || 'Avatar'}
+                  name={user?.name}
+                  size='lg'
+                  className='shadow-lg'
                 />
               </motion.div>
 

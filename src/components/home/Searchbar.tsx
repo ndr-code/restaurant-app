@@ -55,7 +55,7 @@ function Searchbar() {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder='Search restaurants, food, and drink...'
-          className='bg-background/80 border-border text-foreground placeholder:text-muted-foreground focus:ring-primary/50 focus:border-primary w-full rounded-2xl border py-4 pr-16 pl-12 backdrop-blur-md transition-all duration-300 focus:ring-2 focus:outline-none'
+          className='bg-background/80 border-border text-foreground placeholder:text-muted-foreground focus:ring-primary/50 focus:border-primary w-full rounded-full border py-4 pr-16 pl-12 backdrop-blur-md transition-all duration-300 focus:ring-2 focus:outline-none'
           animate={{
             backgroundColor: isFocused
               ? 'var(--background)'
@@ -71,14 +71,13 @@ function Searchbar() {
         {/* Search Button */}
         <motion.button
           type='submit'
-          className='bg-primary hover:bg-primary/90 text-primary-foreground absolute top-1/2 right-2 flex -translate-y-1/2 transform items-center gap-2 rounded-xl px-4 py-2 font-semibold transition-colors duration-200'
+          className='bg-primary hover:bg-primary/90 text-primary-foreground absolute top-1/2 right-2 flex -translate-y-1/2 transform items-center gap-2 rounded-full px-2 py-2 font-semibold transition-colors duration-200'
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           disabled={!searchValue.trim()}
         >
-          <span className='hidden sm:inline'>Search</span>
           <svg
-            className='h-4 w-4'
+            className='h-7 w-7'
             fill='none'
             stroke='currentColor'
             viewBox='0 0 24 24'
@@ -118,7 +117,7 @@ function Searchbar() {
       {/* Search Suggestions (Optional) */}
       {isFocused && searchValue && (
         <motion.div
-          className='bg-background border-border absolute top-full z-20 mt-2 w-full overflow-hidden rounded-xl border shadow-lg'
+          className='bg-background border-border absolute top-full z-20 mt-2 w-full overflow-hidden rounded-full border shadow-lg'
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}

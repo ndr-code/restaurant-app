@@ -69,7 +69,7 @@ function Navbar() {
           className='flex items-center gap-2 font-bold no-underline'
         >
           <motion.div
-            className='flex items-center gap-2 font-bold'
+            className='flex items-center gap-4 font-bold'
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 400 }}
           >

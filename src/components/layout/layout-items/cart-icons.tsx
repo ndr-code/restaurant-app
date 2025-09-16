@@ -18,10 +18,6 @@ const NavIcon = ({ icon, onClick, label }: NavIconProps) => (
     title={label}
   >
     {icon}
-    {/* Tooltip */}
-    <div className='pointer-events-none absolute -bottom-8 left-1/2 -translate-x-1/2 transform rounded bg-black/80 px-2 py-1 text-xs whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
-      {label}
-    </div>
   </motion.div>
 );
 

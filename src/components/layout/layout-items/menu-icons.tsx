@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { AvatarWithInitials } from '../../ui/avatar';
 
-// Professional icon components dengan Lucide React
 export const MenuIcons = {
   Home: () => (
     <div className='mr-2 flex h-5 w-5 items-center justify-center rounded-full shadow-sm'>

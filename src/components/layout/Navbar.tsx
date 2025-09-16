@@ -37,14 +37,29 @@ function Navbar() {
 
   return (
     <motion.nav
-      className='backdrop-blur-2xs fixed top-0 right-0 left-0 z-50'
+      className='fixed top-0 right-0 left-0 z-50'
       style={{
-        backgroundColor: isScrolled ? 'var(--background)' : 'transparent',
-        borderBottom: isScrolled ? '1px solid var(--border)' : 'none',
+        backgroundColor: isScrolled
+          ? 'rgba(255, 255, 255, 0.7)'
+          : 'transparent',
+        backdropFilter: isScrolled
+          ? 'blur(12px) saturate(180%)'
+          : 'saturate(100%)',
+        WebkitBackdropFilter: isScrolled
+          ? 'blur(12px) saturate(180%)'
+          : 'saturate(100%)',
+        borderBottom: isScrolled
+          ? '1px solid rgba(255, 255, 255, 0.2)'
+          : 'none',
         boxShadow: isScrolled ? '0 1px 3px 0 rgb(0 0 0 / 0.1)' : 'none',
       }}
       animate={{
-        backgroundColor: isScrolled ? 'var(--background)' : 'transparent',
+        backgroundColor: isScrolled
+          ? 'rgba(255, 255, 255, 0.7)'
+          : 'transparent',
+        backdropFilter: isScrolled
+          ? 'blur(12px) saturate(180%)'
+          : 'saturate(100%)',
       }}
       transition={{
         duration: 0.3,

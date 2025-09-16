@@ -10,11 +10,11 @@ import {
   getSignUpButtonStyles,
   getSignUpButtonHoverStyles,
   buttonAnimations,
-} from './navbar-button-utils';
+} from './layout-items/navbar-button-utils';
 
-import MobileMenu from './mobile-menu';
-import DesktopMenu from './desktop-menu';
-import { CartIcons } from './cart-icons';
+import MobileMenu from './layout-items/mobile-menu';
+import DesktopMenu from './layout-items/desktop-menu';
+import { CartIcons } from './layout-items/cart-icons';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

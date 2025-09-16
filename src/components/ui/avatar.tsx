@@ -102,7 +102,7 @@ export const AvatarWithInitials = ({
         />
       )}
       <div
-        className={`absolute inset-0 flex items-center justify-center bg-black font-semibold text-white backdrop-blur-sm ${src ? 'hidden' : 'flex'}`}
+        className={`bg-primary-100 absolute inset-0 flex items-center justify-center font-semibold text-white backdrop-blur-sm ${src ? 'hidden' : 'flex'}`}
         style={{ display: src ? 'none' : 'flex' }}
       >
         {initials}

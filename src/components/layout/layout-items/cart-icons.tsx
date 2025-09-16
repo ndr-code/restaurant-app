@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { MenuIcons } from './menu-icons';
-import { ROUTES } from '../../config/routes';
+import { ROUTES } from '../../../config/routes';
 
 interface NavIconProps {
   icon: () => React.ReactElement;

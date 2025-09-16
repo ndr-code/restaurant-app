@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { ROUTES } from '../../config/routes';
+import { useAuth } from '../../../hooks/useAuth';
+import { ROUTES } from '../../../config/routes';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,9 +10,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+} from '../../ui/dropdown-menu';
 import { MenuIcons } from './menu-icons';
-import { AvatarWithInitials } from '../ui/avatar';
+import { AvatarWithInitials } from '../../ui/avatar';
 
 interface DesktopMenuProps {
   isScrolled?: boolean;
@@ -41,7 +41,7 @@ function DesktopMenu({ isScrolled = false }: DesktopMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <motion.button
-            className='focus:ring-primary flex items-center space-x-2 rounded-md px-3 py-2 focus:ring-2 focus:outline-none'
+            className='focus:ring-primary flex items-center gap-3 space-x-2 rounded-md px-3 py-2 focus:ring-2 focus:outline-none'
             style={{
               color: isScrolled ? 'var(--foreground)' : 'var(--base-white)',
             }}

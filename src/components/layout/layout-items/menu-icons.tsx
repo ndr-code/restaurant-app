@@ -6,7 +6,7 @@ import {
   UserPlus,
   LogOut,
 } from 'lucide-react';
-import { AvatarWithInitials } from '../ui/avatar';
+import { AvatarWithInitials } from '../../ui/avatar';
 
 // Professional icon components dengan Lucide React
 export const MenuIcons = {

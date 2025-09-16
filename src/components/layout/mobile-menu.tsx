@@ -19,7 +19,7 @@ interface MobileMenuProps {
 }
 
 function MobileMenu({ isScrolled = false }: MobileMenuProps) {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
   const handleSignIn = () => {
@@ -31,7 +31,6 @@ function MobileMenu({ isScrolled = false }: MobileMenuProps) {
   };
 
   const handleLogout = () => {
-    logout();
     navigate(ROUTES.HOME);
   };
 

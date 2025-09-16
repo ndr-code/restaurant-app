@@ -7,7 +7,6 @@ import { queryClient } from '@/lib/react-query';
 import { initializeAuth } from '@/store/slices/authSlice';
 import type { AppDispatch } from '@/store';
 import { ROUTES } from '@/config/routes';
-import { rememberMeUtils } from '@/lib/rememberMe';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
@@ -25,10 +24,6 @@ function App() {
 
   // Initialize auth state and cleanup expired credentials on app startup
   useEffect(() => {
-    // Clean up expired credentials first
-    rememberMeUtils.loadCredentials(); // This will auto-clear if expired
-
-    // Then initialize auth
     dispatch(initializeAuth());
   }, [dispatch]);
 

@@ -5,7 +5,6 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { useAuth } from '../hooks/useAuth';
 import { ROUTES } from '../config/routes';
-import { rememberMeUtils } from '../lib/rememberMe';
 import type { LoginRequest } from '../types/api';
 
 const Login: React.FC = () => {
@@ -19,19 +18,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const { isLoading, error, isAuthenticated, login } = useAuth();
-
-  // Load saved credentials on component mount
-  useEffect(() => {
-    const savedCredentials = rememberMeUtils.loadCredentials();
-
-    if (savedCredentials) {
-      setFormData({
-        email: savedCredentials.email,
-        password: savedCredentials.password,
-      });
-      setRememberMe(true);
-    }
-  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -55,26 +41,6 @@ const Login: React.FC = () => {
 
       if (result.type === 'auth/loginUser/fulfilled') {
         console.log('Login successful:', result.payload);
-
-        // Handle remember me functionality
-        if (rememberMe) {
-          // Check if these are the same credentials that were remembered
-          const savedCredentials = rememberMeUtils.loadCredentials();
-          if (
-            savedCredentials &&
-            savedCredentials.email === formData.email &&
-            savedCredentials.password === formData.password
-          ) {
-            // Just refresh the timestamp for existing credentials
-            rememberMeUtils.refreshCredentials();
-          } else {
-            // Save new credentials
-            rememberMeUtils.saveCredentials(formData.email, formData.password);
-          }
-        } else {
-          // Clear saved credentials if remember me is unchecked
-          rememberMeUtils.clearCredentials();
-        }
       } else {
         console.error('Login failed:', result.payload);
       }

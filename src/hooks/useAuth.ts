@@ -7,7 +7,6 @@ import {
   updateProfile,
   changePassword,
 } from '../store/slices/authSlice';
-import { rememberMeUtils } from '../lib/rememberMe';
 import type {
   LoginRequest,
   RegisterRequest,
@@ -28,8 +27,6 @@ export const useAuth = () => {
   };
 
   const logoutUser = () => {
-    // Clear remembered credentials on logout
-    rememberMeUtils.clearCredentials();
     dispatch(logout());
   };
 

@@ -14,7 +14,7 @@ import {
 
 import MobileMenu from './mobile-menu';
 import DesktopMenu from './desktop-menu';
-import { DesktopNavIcons } from './desktop-nav-icons';
+import { CartIcons } from './cart-icons';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -90,11 +90,11 @@ function Navbar() {
             Foody
           </motion.div>
         </Link>
-        <div className='flex flex-row items-center gap-4'>
+        <div className='flex flex-row items-center gap-1'>
           {isAuthenticated ? (
             // Authenticated state - Desktop dropdown menu
             <>
-              <DesktopNavIcons />
+              <CartIcons />
               <DesktopMenu isScrolled={isScrolled} />
             </>
           ) : (

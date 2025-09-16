@@ -26,7 +26,7 @@ const NavIcon = ({ icon: Icon, onClick, label }: NavIconProps) => (
   </motion.div>
 );
 
-export const DesktopNavIcons = () => {
+export const CartIcons = () => {
   const navigate = useNavigate();
 
   const navigationItems = [

@@ -1,17 +1,18 @@
 import { useAppSelector, useAppDispatch } from '../store';
-import { 
-  loginUser, 
-  registerUser, 
-  logout, 
-  fetchProfile, 
-  updateProfile, 
-  changePassword 
+import {
+  loginUser,
+  registerUser,
+  logout,
+  fetchProfile,
+  updateProfile,
+  changePassword,
 } from '../store/slices/authSlice';
-import type { 
-  LoginRequest, 
-  RegisterRequest, 
-  UpdateProfileRequest, 
-  ChangePasswordRequest 
+import { rememberMeUtils } from '../utils/rememberMe';
+import type {
+  LoginRequest,
+  RegisterRequest,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
 } from '../types/api';
 
 export const useAuth = () => {
@@ -27,6 +28,8 @@ export const useAuth = () => {
   };
 
   const logoutUser = () => {
+    // Clear remembered credentials on logout
+    rememberMeUtils.clearCredentials();
     dispatch(logout());
   };
 
@@ -47,7 +50,7 @@ export const useAuth = () => {
     user: auth.user,
     token: auth.token,
     isAuthenticated: auth.isAuthenticated,
-    
+
     // Loading states
     isLoading: auth.isLoading,
     error: auth.error,
@@ -57,7 +60,7 @@ export const useAuth = () => {
     profileError: auth.profileError,
     isPasswordChanging: auth.isPasswordChanging,
     passwordChangeError: auth.passwordChangeError,
-    
+
     // Actions
     login,
     register,
@@ -65,7 +68,7 @@ export const useAuth = () => {
     getProfile,
     updateUserProfile,
     changeUserPassword,
-    
+
     // Computed values
     isGuest: !auth.isAuthenticated,
     userName: auth.user?.name || '',

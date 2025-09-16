@@ -5,39 +5,39 @@ export const ROUTES = {
   RESTAURANTS: '/restaurants',
   RESTAURANT_DETAIL: '/restaurants/:id',
   SEARCH: '/search',
-  
+
   // Auth routes
   LOGIN: '/login',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
-  
+
   // Protected routes
   PROFILE: '/profile',
   EDIT_PROFILE: '/profile/edit',
   ORDERS: '/orders',
   ORDER_DETAIL: '/orders/:id',
   ORDER_TRACKING: '/orders/:id/tracking',
-  
+
   // Cart & Checkout
   CART: '/cart',
   CHECKOUT: '/checkout',
   PAYMENT: '/payment',
   PAYMENT_SUCCESS: '/payment/success',
   PAYMENT_FAILED: '/payment/failed',
-  
+
   // Restaurant specific
   MENU: '/restaurants/:restaurantId/menu',
   MENU_ITEM: '/restaurants/:restaurantId/menu/:itemId',
   REVIEWS: '/restaurants/:restaurantId/reviews',
-  
+
   // Admin routes (future)
   ADMIN: '/admin',
   ADMIN_DASHBOARD: '/admin/dashboard',
   ADMIN_RESTAURANTS: '/admin/restaurants',
   ADMIN_ORDERS: '/admin/orders',
   ADMIN_USERS: '/admin/users',
-  
+
   // Other
   ABOUT: '/about',
   CONTACT: '/contact',
@@ -52,10 +52,12 @@ export const buildRoute = {
   restaurantDetail: (id: number | string) => `/restaurants/${id}`,
   orderDetail: (id: number | string) => `/orders/${id}`,
   orderTracking: (id: number | string) => `/orders/${id}/tracking`,
-  restaurantMenu: (restaurantId: number | string) => `/restaurants/${restaurantId}/menu`,
-  menuItem: (restaurantId: number | string, itemId: number | string) => 
+  restaurantMenu: (restaurantId: number | string) =>
+    `/restaurants/${restaurantId}/menu`,
+  menuItem: (restaurantId: number | string, itemId: number | string) =>
     `/restaurants/${restaurantId}/menu/${itemId}`,
-  restaurantReviews: (restaurantId: number | string) => `/restaurants/${restaurantId}/reviews`,
+  restaurantReviews: (restaurantId: number | string) =>
+    `/restaurants/${restaurantId}/reviews`,
 } as const;
 
 // Route metadata for navigation

@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { useAuth } from '../hooks/useAuth';
 import { ROUTES } from '../config/routes';
+import { rememberMeUtils } from '../utils/rememberMe';
 import type { LoginRequest } from '../types/api';
 
 const Login: React.FC = () => {
@@ -13,9 +14,24 @@ const Login: React.FC = () => {
     password: '',
   });
 
+  const [rememberMe, setRememberMe] = useState(false);
+
   const navigate = useNavigate();
 
   const { isLoading, error, isAuthenticated, login } = useAuth();
+
+  // Load saved credentials on component mount
+  useEffect(() => {
+    const savedCredentials = rememberMeUtils.loadCredentials();
+
+    if (savedCredentials) {
+      setFormData({
+        email: savedCredentials.email,
+        password: savedCredentials.password,
+      });
+      setRememberMe(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -39,6 +55,26 @@ const Login: React.FC = () => {
 
       if (result.type === 'auth/loginUser/fulfilled') {
         console.log('Login successful:', result.payload);
+
+        // Handle remember me functionality
+        if (rememberMe) {
+          // Check if these are the same credentials that were remembered
+          const savedCredentials = rememberMeUtils.loadCredentials();
+          if (
+            savedCredentials &&
+            savedCredentials.email === formData.email &&
+            savedCredentials.password === formData.password
+          ) {
+            // Just refresh the timestamp for existing credentials
+            rememberMeUtils.refreshCredentials();
+          } else {
+            // Save new credentials
+            rememberMeUtils.saveCredentials(formData.email, formData.password);
+          }
+        } else {
+          // Clear saved credentials if remember me is unchecked
+          rememberMeUtils.clearCredentials();
+        }
       } else {
         console.error('Login failed:', result.payload);
       }
@@ -111,6 +147,8 @@ const Login: React.FC = () => {
                   id='remember-me'
                   name='remember-me'
                   type='checkbox'
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className='h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
                 />
                 <label

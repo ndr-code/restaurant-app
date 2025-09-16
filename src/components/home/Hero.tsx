@@ -17,7 +17,7 @@ function Hero() {
 
   return (
     <div
-      className='relative flex h-screen flex-col items-center justify-center space-y-4 bg-cover bg-center bg-no-repeat p-4 pt-20 shadow-lg'
+      className='relative flex h-screen max-h-[648px] flex-col items-center justify-center space-y-4 bg-cover bg-center bg-no-repeat p-4 pt-20 shadow-lg sm:max-h-none'
       style={{ backgroundImage: "url('/images/hero-background.png')" }}
     >
       <div className='absolute inset-0 h-full bg-black/60'></div>

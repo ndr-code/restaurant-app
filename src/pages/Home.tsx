@@ -3,6 +3,7 @@ import Navbar from '../components/layout/navbar';
 import Hero from '../components/home/hero';
 import Footer from '../components/layout/footer';
 import HomeMenu from '../components/home/home-menu';
+import Recommended from '../components/home/recommended';
 
 const Home: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const Home: React.FC = () => {
       <Navbar />
       <Hero />
       <HomeMenu />
+      <Recommended />
       <Footer />
     </div>
   );

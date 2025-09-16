@@ -40,7 +40,7 @@ function Navbar() {
       className='fixed top-0 right-0 left-0 z-50'
       style={{
         backgroundColor: isScrolled
-          ? 'rgba(255, 255, 255, 0.7)'
+          ? 'rgba(255, 255, 255, 0.8)'
           : 'transparent',
         backdropFilter: isScrolled
           ? 'blur(12px) saturate(180%)'
@@ -51,11 +51,11 @@ function Navbar() {
         borderBottom: isScrolled
           ? '1px solid rgba(255, 255, 255, 0.2)'
           : 'none',
-        boxShadow: isScrolled ? '0 1px 3px 0 rgb(0 0 0 / 0.1)' : 'none',
+        boxShadow: isScrolled ? '0 1px 12px 0 rgb(0 0 0 / 0.1)' : 'none',
       }}
       animate={{
         backgroundColor: isScrolled
-          ? 'rgba(255, 255, 255, 0.7)'
+          ? 'rgba(255, 255, 255, 0.8)'
           : 'transparent',
         backdropFilter: isScrolled
           ? 'blur(12px) saturate(180%)'

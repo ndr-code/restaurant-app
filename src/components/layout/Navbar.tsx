@@ -15,7 +15,7 @@ import {
 import MobileMenu from './mobile-menu';
 import Logout from '../logout';
 import { AvatarWithInitials } from '../ui/avatar';
-import { DesktopNavIcons } from './DesktopNavIcons';
+import { DesktopNavIcons } from './desktop-nav-icons';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

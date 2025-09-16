@@ -41,7 +41,7 @@ function DesktopMenu({ isScrolled = false }: DesktopMenuProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <motion.button
-            className='flex items-center gap-3 space-x-2 rounded-md px-3 py-2 focus:outline-none focus:ring-0'
+            className='flex items-center gap-3 space-x-2 rounded-md px-3 py-2 focus:ring-0 focus:outline-none'
             style={{
               color: isScrolled ? 'var(--foreground)' : 'var(--base-white)',
             }}

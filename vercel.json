@@ -13,11 +13,5 @@
     "src/services/api/**/*.ts": {
       "runtime": "@vercel/node@2.0.0"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://be-restaurant-app-for-mentee-b6yxog5fk.vercel.app/api/$1"
-    }
-  ]
+  }
 }

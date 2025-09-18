@@ -5,3 +5,4 @@ export * from './useOrders';
 export * from './useReviews';
 export * from './useRestaurantUI';
 export * from './useScreenSize';
+export * from './useSearch';

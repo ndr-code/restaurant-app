@@ -2,7 +2,12 @@ import { motion } from 'motion/react';
 import { useScreenSize } from '@/hooks';
 import Searchbar from './searchbar';
 
-function Hero() {
+interface HeroProps {
+  onSearch?: (query: string) => void;
+  onClearSearch?: () => void;
+}
+
+function Hero({ onSearch, onClearSearch }: HeroProps) {
   const { isAtLeast } = useScreenSize();
 
   const getTitleSize = () => {
@@ -46,7 +51,7 @@ function Hero() {
         >
           Search and refine your choice to discover the perfect restaurant.
         </motion.p>
-        <Searchbar />
+        <Searchbar onSearch={onSearch} onClear={onClearSearch} />
       </div>
     </div>
   );

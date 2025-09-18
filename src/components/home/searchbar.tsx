@@ -1,17 +1,58 @@
-import { useState } from 'react';
-import { motion } from 'motion/react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useSearchSuggestions } from '../../hooks/useSearch';
 
-function Searchbar() {
+interface SearchbarProps {
+  onSearch?: (query: string) => void;
+  onClear?: () => void;
+}
+
+function Searchbar({ onSearch, onClear }: SearchbarProps) {
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const { data: suggestions = [], isLoading: suggestionsLoading } =
+    useSearchSuggestions(searchValue);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
-      console.log('Searching for:', searchValue);
-      // TODO: Implement search functionality
+      onSearch?.(searchValue.trim());
+      setShowSuggestions(false);
+      setIsFocused(false);
     }
   };
+
+  const handleSuggestionClick = (suggestionText: string) => {
+    setSearchValue(suggestionText);
+    onSearch?.(suggestionText);
+    setShowSuggestions(false);
+    setIsFocused(false);
+  };
+
+  const handleClear = () => {
+    setSearchValue('');
+    setShowSuggestions(false);
+    onClear?.();
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    setShowSuggestions(true);
+  };
+
+  const handleBlur = () => {
+    // Delay hiding suggestions to allow clicking on them
+    setTimeout(() => {
+      setIsFocused(false);
+      setShowSuggestions(false);
+    }, 200);
+  };
+
+  useEffect(() => {
+    setShowSuggestions(isFocused && searchValue.length >= 2);
+  }, [isFocused, searchValue]);
 
   return (
     <motion.form
@@ -54,8 +95,8 @@ function Searchbar() {
           type='text'
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           placeholder='Search restaurants, food, and drink...'
           className='bg-background/80 border-border text-foreground placeholder:text-muted-foreground focus:ring-primary/50 focus:border-primary w-full rounded-full border py-4 pr-16 pl-12 backdrop-blur-md transition-all duration-300 focus:ring-2 focus:outline-none'
           style={{
@@ -97,7 +138,7 @@ function Searchbar() {
         {searchValue && (
           <motion.button
             type='button'
-            onClick={() => setSearchValue('')}
+            onClick={handleClear}
             className='text-muted-foreground hover:text-foreground absolute top-1/2 right-16 -translate-y-1/2 transform p-1 transition-colors'
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -116,21 +157,52 @@ function Searchbar() {
         )}
       </div>
 
-      {/* Search Suggestions (Optional) */}
-      {isFocused && searchValue && (
-        <motion.div
-          className='bg-background border-border absolute top-full z-20 mt-2 w-full overflow-hidden rounded-full border shadow-lg'
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className='p-4'>
-            <p className='text-muted-foreground text-sm'>
-              Search suggestions will appear here...
-            </p>
-          </div>
-        </motion.div>
-      )}
+      {/* Search Suggestions */}
+      <AnimatePresence>
+        {showSuggestions && suggestions.length > 0 && (
+          <motion.div
+            className='bg-background border-border absolute top-full z-20 mt-2 w-full overflow-hidden rounded-2xl border shadow-lg'
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className='py-2'>
+              {suggestions.map((suggestion) => (
+                <motion.button
+                  key={suggestion.id}
+                  type='button'
+                  onClick={() => handleSuggestionClick(suggestion.text)}
+                  className='text-foreground hover:bg-muted flex w-full items-center gap-3 px-4 py-3 text-left transition-colors'
+                  whileHover={{ backgroundColor: 'var(--muted)' }}
+                >
+                  <div className='flex h-8 w-8 items-center justify-center rounded-full bg-primary/10'>
+                    {suggestion.type === 'restaurant' && (
+                      <svg className='h-4 w-4 text-primary' fill='currentColor' viewBox='0 0 20 20'>
+                        <path fillRule='evenodd' d='M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z' clipRule='evenodd' />
+                      </svg>
+                    )}
+                    {suggestion.type === 'dish' && (
+                      <svg className='h-4 w-4 text-primary' fill='currentColor' viewBox='0 0 20 20'>
+                        <path d='M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z' />
+                      </svg>
+                    )}
+                    {suggestion.type === 'cuisine' && (
+                      <svg className='h-4 w-4 text-primary' fill='currentColor' viewBox='0 0 20 20'>
+                        <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' />
+                      </svg>
+                    )}
+                  </div>
+                  <div className='flex-1'>
+                    <p className='text-sm font-medium'>{suggestion.text}</p>
+                    <p className='text-xs text-muted-foreground capitalize'>{suggestion.type}</p>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.form>
   );
 }

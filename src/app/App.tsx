@@ -8,6 +8,7 @@ import { initializeAuth } from '@/store/slices/authSlice';
 import type { AppDispatch } from '@/store';
 import { ROUTES } from '@/config/routes';
 import Home from '@/pages/Home';
+import Auth from '@/pages/Auth';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Cart from '@/pages/Cart';
@@ -40,6 +41,7 @@ function App() {
           <Route path={ROUTES.HELP} element={<Help />} />
 
           {/* Auth Routes */}
+          <Route path={ROUTES.AUTH} element={<Auth />} />
           <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.REGISTER} element={<Register />} />
 

@@ -7,6 +7,9 @@ export const ROUTES = {
   SEARCH: '/search',
 
   // Auth routes
+  AUTH: '/auth',
+  AUTH_LOGIN: '/auth?tab=signin',
+  AUTH_REGISTER: '/auth?tab=signup',
   LOGIN: '/login',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',

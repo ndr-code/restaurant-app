@@ -6,7 +6,29 @@ import {
   selectFilters,
 } from '@/store/slices/restaurantSlice';
 import { Button } from '../ui/button';
-import RestaurantCard from '../ui/restaurant-card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
+
+// Types untuk API response yang sebenarnya
+interface RestaurantFromAPI {
+  id: number;
+  name: string;
+  star: number;
+  place: string;
+  logo: string;
+  images: string[];
+  reviewCount: number;
+  menuCount: number;
+  priceRange: {
+    min: number;
+    max: number;
+  };
+}
 
 const AllRestaurants: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +52,14 @@ const AllRestaurants: React.FC = () => {
 
   const handleRefresh = () => {
     refetch();
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(price);
   };
 
   return (
@@ -109,16 +139,83 @@ const AllRestaurants: React.FC = () => {
 
             {/* Restaurant Cards Grid */}
             <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-              {restaurants.map((restaurant) => (
-                <RestaurantCard
-                  key={restaurant.id}
-                  restaurant={restaurant}
-                  distance={'-'}
-                  onClick={() =>
-                    console.log('View details for:', restaurant.name)
-                  }
-                />
-              ))}
+              {restaurants.map((restaurant) => {
+                const restaurantData =
+                  restaurant as unknown as RestaurantFromAPI;
+                return (
+                  <Card
+                    key={restaurantData.id}
+                    className='transition-all duration-200 hover:-translate-y-1 hover:shadow-lg'
+                  >
+                    {/* Restaurant Image */}
+                    <div className='relative h-48 overflow-hidden rounded-t-lg'>
+                      <img
+                        src={
+                          restaurantData.images?.[0] ||
+                          '/placeholder-restaurant.jpg'
+                        }
+                        alt={restaurantData.name}
+                        className='h-full w-full object-cover'
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            'https://via.placeholder.com/300x200?text=Restaurant';
+                        }}
+                      />
+                      <div className='bg-opacity-90 absolute top-2 right-2 rounded-full bg-white px-2 py-1 text-xs font-medium'>
+                        ⭐ {restaurantData.star?.toFixed(1)}
+                      </div>
+                    </div>
+
+                    <CardHeader className='pb-2'>
+                      <CardTitle className='line-clamp-1 text-lg font-semibold'>
+                        {restaurantData.name}
+                      </CardTitle>
+                      <CardDescription className='flex items-center text-sm text-gray-600'>
+                        📍 {restaurantData.place}
+                      </CardDescription>
+                    </CardHeader>
+
+                    <CardContent className='space-y-3'>
+                      {/* Stats */}
+                      <div className='grid grid-cols-2 gap-2 text-xs'>
+                        <div className='flex items-center gap-1'>
+                          <span>📝</span>
+                          <span>{restaurantData.reviewCount} reviews</span>
+                        </div>
+                        <div className='flex items-center gap-1'>
+                          <span>🍽️</span>
+                          <span>{restaurantData.menuCount} menu</span>
+                        </div>
+                      </div>
+
+                      {/* Price Range */}
+                      {restaurantData.priceRange && (
+                        <div className='rounded bg-gray-50 p-2'>
+                          <div className='mb-1 text-xs text-gray-600'>
+                            💰 Price Range:
+                          </div>
+                          <div className='text-sm font-medium text-green-600'>
+                            {formatPrice(restaurantData.priceRange.min)} -{' '}
+                            {formatPrice(restaurantData.priceRange.max)}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Action Button */}
+                      <Button
+                        variant='outline'
+                        size='sm'
+                        className='mt-3 w-full'
+                        onClick={() =>
+                          console.log('View details for:', restaurantData.name)
+                        }
+                      >
+                        👀 Lihat Detail
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         )}

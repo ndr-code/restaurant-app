@@ -16,10 +16,23 @@ export const useScreenSize = () => {
     width: number;
     height: number;
     breakpoint: Breakpoint;
-  }>({
-    width: 0,
-    height: 0,
-    breakpoint: 'sm',
+  }>(() => {
+    // Initialize with safe defaults
+    if (typeof window === 'undefined') {
+      return { width: 1024, height: 768, breakpoint: 'lg' };
+    }
+
+    const width = window.innerWidth || 1024;
+    const height = window.innerHeight || 768;
+    let breakpoint: Breakpoint = 'lg';
+
+    if (width >= breakpoints['2xl']) breakpoint = '2xl';
+    else if (width >= breakpoints.xl) breakpoint = 'xl';
+    else if (width >= breakpoints.lg) breakpoint = 'lg';
+    else if (width >= breakpoints.md) breakpoint = 'md';
+    else breakpoint = 'sm';
+
+    return { width, height, breakpoint };
   });
 
   useEffect(() => {

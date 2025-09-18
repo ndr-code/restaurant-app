@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useScreenSize } from '@/hooks';
-import Searchbar from '././searchbar';
+import Searchbar from './searchbar';
 
 function Hero() {
   const { isAtLeast } = useScreenSize();

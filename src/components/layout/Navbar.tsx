@@ -53,14 +53,6 @@ function Navbar() {
           : 'none',
         boxShadow: isScrolled ? '0 1px 12px 0 rgb(0 0 0 / 0.1)' : 'none',
       }}
-      animate={{
-        backgroundColor: isScrolled
-          ? 'rgba(255, 255, 255, 0.8)'
-          : 'transparent',
-        backdropFilter: isScrolled
-          ? 'blur(12px) saturate(180%)'
-          : 'saturate(100%)',
-      }}
       transition={{
         duration: 0.3,
         ease: 'easeInOut',
@@ -69,9 +61,6 @@ function Navbar() {
       <motion.div
         className='display-md-extrabold mx-auto flex max-w-7xl flex-row justify-between p-4'
         style={{
-          color: isScrolled ? 'var(--foreground)' : 'var(--base-white)',
-        }}
-        animate={{
           color: isScrolled ? 'var(--foreground)' : 'var(--base-white)',
         }}
         transition={{

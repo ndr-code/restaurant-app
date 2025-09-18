@@ -53,7 +53,7 @@ function HomeMenu() {
   };
 
   return (
-    <div className='mx-auto mt-4 mb-4 grid w-full max-w-7xl grid-cols-3 gap-0 sm:mt-8 sm:grid-cols-6 sm:gap-6'>
+    <div className='mx-auto mt-4 mb-4 grid w-full max-w-7xl grid-cols-3 gap-0 sm:mt-8 sm:gap-0 lg:grid-cols-6'>
       {homeMenuData.map((item) => (
         <motion.div
           key={item.title}

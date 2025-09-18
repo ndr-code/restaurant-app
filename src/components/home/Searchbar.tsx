@@ -25,9 +25,11 @@ function Searchbar() {
         {/* Search Icon */}
         <motion.div
           className='absolute top-1/2 left-4 z-10 -translate-y-1/2 transform'
+          style={{
+            color: isFocused ? 'var(--primary)' : 'var(--muted-foreground)',
+          }}
           animate={{
             scale: isFocused ? 1.1 : 1,
-            color: isFocused ? 'var(--primary)' : 'var(--muted-foreground)',
           }}
           transition={{ duration: 0.2 }}
         >
@@ -56,7 +58,7 @@ function Searchbar() {
           onBlur={() => setIsFocused(false)}
           placeholder='Search restaurants, food, and drink...'
           className='bg-background/80 border-border text-foreground placeholder:text-muted-foreground focus:ring-primary/50 focus:border-primary w-full rounded-full border py-4 pr-16 pl-12 backdrop-blur-md transition-all duration-300 focus:ring-2 focus:outline-none'
-          animate={{
+          style={{
             backgroundColor: isFocused
               ? 'var(--background)'
               : 'var(--background)/80',

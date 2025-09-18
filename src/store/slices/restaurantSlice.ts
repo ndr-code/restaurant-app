@@ -9,16 +9,16 @@ interface RestaurantUIState {
   filters: RestaurantFilters;
   sortBy: 'name' | 'rating' | 'priceRange' | 'distance';
   sortOrder: 'asc' | 'desc';
-  
+
   // Modal & View States
   isFilterModalOpen: boolean;
   isMapViewActive: boolean;
   viewMode: 'grid' | 'list';
-  
+
   // Pagination
   currentPage: number;
   itemsPerPage: number;
-  
+
   // UI Preferences
   showFavoritesOnly: boolean;
   compactView: boolean;
@@ -32,7 +32,7 @@ const initialState: RestaurantUIState = {
     priceMax: undefined,
     rating: undefined,
     page: 1,
-    limit: 10,
+    limit: 12,
   },
   sortBy: 'rating',
   sortOrder: 'desc',
@@ -80,7 +80,10 @@ const restaurantUISlice = createSlice({
     setSortBy: (state, action: PayloadAction<RestaurantUIState['sortBy']>) => {
       state.sortBy = action.payload;
     },
-    setSortOrder: (state, action: PayloadAction<RestaurantUIState['sortOrder']>) => {
+    setSortOrder: (
+      state,
+      action: PayloadAction<RestaurantUIState['sortOrder']>
+    ) => {
       state.sortOrder = action.payload;
     },
     toggleSortOrder: (state) => {
@@ -99,7 +102,10 @@ const restaurantUISlice = createSlice({
     toggleMapView: (state) => {
       state.isMapViewActive = !state.isMapViewActive;
     },
-    setViewMode: (state, action: PayloadAction<RestaurantUIState['viewMode']>) => {
+    setViewMode: (
+      state,
+      action: PayloadAction<RestaurantUIState['viewMode']>
+    ) => {
       state.viewMode = action.payload;
     },
 
@@ -148,18 +154,26 @@ export const {
 export default restaurantUISlice.reducer;
 
 // Selectors
-export const selectRestaurantUI = (state: { restaurantUI: RestaurantUIState }) => state.restaurantUI;
-export const selectSearchQuery = (state: { restaurantUI: RestaurantUIState }) => state.restaurantUI.searchQuery;
-export const selectFilters = (state: { restaurantUI: RestaurantUIState }) => state.restaurantUI.filters;
+export const selectRestaurantUI = (state: {
+  restaurantUI: RestaurantUIState;
+}) => state.restaurantUI;
+export const selectSearchQuery = (state: { restaurantUI: RestaurantUIState }) =>
+  state.restaurantUI.searchQuery;
+export const selectFilters = (state: { restaurantUI: RestaurantUIState }) =>
+  state.restaurantUI.filters;
 export const selectSorting = (state: { restaurantUI: RestaurantUIState }) => ({
   sortBy: state.restaurantUI.sortBy,
   sortOrder: state.restaurantUI.sortOrder,
 });
-export const selectPagination = (state: { restaurantUI: RestaurantUIState }) => ({
+export const selectPagination = (state: {
+  restaurantUI: RestaurantUIState;
+}) => ({
   currentPage: state.restaurantUI.currentPage,
   itemsPerPage: state.restaurantUI.itemsPerPage,
 });
-export const selectViewPreferences = (state: { restaurantUI: RestaurantUIState }) => ({
+export const selectViewPreferences = (state: {
+  restaurantUI: RestaurantUIState;
+}) => ({
   viewMode: state.restaurantUI.viewMode,
   isMapViewActive: state.restaurantUI.isMapViewActive,
   showFavoritesOnly: state.restaurantUI.showFavoritesOnly,

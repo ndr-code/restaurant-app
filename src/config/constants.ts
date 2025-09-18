@@ -1,36 +1,36 @@
 // Application constants
 export const APP_CONSTANTS = {
   // Pagination
-  DEFAULT_PAGE_SIZE: 10,
+  DEFAULT_PAGE_SIZE: 12,
   MAX_PAGE_SIZE: 100,
-  
+
   // Cache times (in milliseconds)
   CACHE_TIME: {
     SHORT: 1000 * 60 * 5, // 5 minutes
     MEDIUM: 1000 * 60 * 30, // 30 minutes
     LONG: 1000 * 60 * 60, // 1 hour
   },
-  
+
   // API timeouts
   TIMEOUT: {
     DEFAULT: 10000, // 10 seconds
     UPLOAD: 30000, // 30 seconds
     DOWNLOAD: 60000, // 1 minute
   },
-  
+
   // Validation
   PASSWORD_MIN_LENGTH: 8,
   PHONE_REGEX: /^(\+62|62|0)8[1-9][0-9]{6,9}$/,
   EMAIL_REGEX: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  
+
   // File upload
   MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
   ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
-  
+
   // Currency
   DEFAULT_CURRENCY: 'IDR',
   CURRENCY_SYMBOL: 'Rp',
-  
+
   // Order statuses
   ORDER_STATUS: {
     PREPARING: 'preparing',
@@ -39,7 +39,7 @@ export const APP_CONSTANTS = {
     DONE: 'done',
     CANCELLED: 'cancelled',
   } as const,
-  
+
   // Payment methods
   PAYMENT_METHODS: {
     CREDIT_CARD: 'credit_card',
@@ -47,14 +47,14 @@ export const APP_CONSTANTS = {
     CASH: 'cash',
     E_WALLET: 'e_wallet',
   } as const,
-  
+
   // User roles
   USER_ROLES: {
     CUSTOMER: 'customer',
     ADMIN: 'admin',
     STAFF: 'staff',
   } as const,
-  
+
   // Notification types
   NOTIFICATION_TYPES: {
     ORDER_CONFIRMED: 'order_confirmed',
@@ -65,7 +65,7 @@ export const APP_CONSTANTS = {
     PROMOTION: 'promotion',
     SYSTEM: 'system',
   } as const,
-  
+
   // Price ranges
   PRICE_RANGES: [
     { label: '$', value: 'low', min: 0, max: 50000 },
@@ -73,11 +73,11 @@ export const APP_CONSTANTS = {
     { label: '$$$', value: 'high', min: 150000, max: 300000 },
     { label: '$$$$', value: 'premium', min: 300000, max: Number.MAX_VALUE },
   ],
-  
+
   // Rating
   MIN_RATING: 1,
   MAX_RATING: 5,
-  
+
   // Map settings
   DEFAULT_LOCATION: {
     lat: -6.2088,

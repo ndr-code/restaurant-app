@@ -24,6 +24,8 @@ export const useScreenSize = () => {
 
   useEffect(() => {
     const updateScreenSize = () => {
+      if (typeof window === 'undefined') return;
+
       const width = window.innerWidth;
       const height = window.innerHeight;
 
@@ -41,11 +43,17 @@ export const useScreenSize = () => {
     // Set initial values
     updateScreenSize();
 
-    // Add event listener
-    window.addEventListener('resize', updateScreenSize);
+    // Add event listener (only if window exists)
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', updateScreenSize);
+    }
 
     // Cleanup
-    return () => window.removeEventListener('resize', updateScreenSize);
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', updateScreenSize);
+      }
+    };
   }, []);
 
   // Helper functions

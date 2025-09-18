@@ -18,20 +18,20 @@ function RestaurantCard({
 
   // Dynamic sizing based on screen size
   const getImageSize = () => {
-    if (isMobile) return 'h-12 w-12';
-    if (isTablet) return 'h-14 w-14';
-    return 'h-16 w-16';
+    if (isMobile) return 'h-20 w-20';
+    if (isTablet) return 'h-25 w-25';
+    return 'h-30 w-30';
   };
 
   const getTextSize = () => {
     if (isMobile)
       return {
-        name: 'text-sm font-semibold',
+        name: 'text-sm font-bold',
         rating: 'text-xs',
         location: 'text-xs text-gray-600',
       };
     return {
-      name: 'text-base font-semibold',
+      name: 'text-base font-bold',
       rating: 'text-sm',
       location: 'text-sm text-gray-600',
     };
@@ -41,7 +41,7 @@ function RestaurantCard({
 
   return (
     <motion.div
-      className={`flex cursor-pointer items-center gap-3 rounded-lg bg-white p-3 shadow-sm transition-all hover:shadow-md ${
+      className={`flex cursor-pointer items-center gap-3 rounded-xl bg-white p-3 shadow-sm transition-all hover:shadow-md sm:rounded-2xl ${
         isMobile ? 'p-3' : 'p-4'
       }`}
       whileHover={{ scale: 1.02 }}
@@ -51,10 +51,10 @@ function RestaurantCard({
     >
       {/* Restaurant Image/Logo */}
       <div
-        className={`flex-shrink-0 overflow-hidden rounded-lg ${getImageSize()}`}
+        className={`flex-shrink-0 overflow-hidden rounded-md sm:rounded-xl ${getImageSize()}`}
       >
         <img
-          src={restaurant.image || '/bk-logo.png'}
+          src={restaurant.image || '/icons/bk-logo.png'}
           alt={`${restaurant.name || 'Restaurant'} logo`}
           className='h-full w-full object-cover'
           loading='lazy'

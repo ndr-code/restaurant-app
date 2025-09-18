@@ -63,7 +63,7 @@ function HomeMenu() {
         >
           <Link
             to={item.href}
-            className='flex flex-col items-center space-y-2 rounded-lg p-4 transition-colors duration-200'
+            className='flex flex-col items-center space-y-2 rounded-lg p-3 transition-colors duration-200 sm:p-6'
           >
             <motion.div
               className='bg-base-white flex h-25 w-full items-center justify-center rounded-2xl p-3 shadow-lg transition-colors duration-200'

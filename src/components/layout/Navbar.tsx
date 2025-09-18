@@ -80,7 +80,7 @@ function Navbar() {
             <motion.img
               src='/icons/logo-foody.svg'
               alt='Foody Logo'
-              className='h-8 w-8'
+              className='h-11 w-11'
               style={{
                 filter: isScrolled
                   ? 'brightness(0) saturate(100%) invert(18%) sepia(97%) saturate(4456%) hue-rotate(354deg) brightness(95%) contrast(94%)'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -238,9 +238,18 @@ const Auth: React.FC = () => {
       {/* Right side - Form */}
       <div className='flex w-full items-center justify-center bg-white p-8 lg:w-1/2'>
         <div className='w-full max-w-md space-y-8'>
+          {/* Back Button */}
+          <Button
+            variant='link'
+            onClick={() => navigate(ROUTES.HOME)}
+            className='flex items-center space-x-2 text-neutral-600 transition-colors duration-200 hover:text-neutral-800'
+          >
+            <ArrowLeft size={20} />
+            <span className='text-sm font-medium'>Back</span>
+          </Button>
           {/* Logo and Welcome Text */}
-          <div className='space-y-4 text-center'>
-            <div className='flex items-center justify-center space-x-2'>
+          <div className='space-y-4'>
+            <div className='flex items-center justify-start space-x-2'>
               <img
                 src='/icons/logo-foody.svg'
                 alt='Foody Logo'
@@ -250,10 +259,12 @@ const Auth: React.FC = () => {
                     'brightness(0) saturate(100%) invert(14%) sepia(93%) saturate(7151%) hue-rotate(3deg) brightness(90%) contrast(114%)',
                 }}
               />
-              <h1 className='display-xs-bold text-foreground'>Foody</h1>
+              <h1 className='display-md-extrabold text-foreground'>Foody</h1>
             </div>
             <div className='space-y-2'>
-              <h2 className='display-sm-bold text-foreground'>Welcome Back</h2>
+              <h2 className='display-sm-extrabold text-foreground'>
+                Welcome Back
+              </h2>
               <p className='text-muted-foreground text-sm'>
                 Good to see you again! Let's eat
               </p>
@@ -262,7 +273,7 @@ const Auth: React.FC = () => {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className='grid w-full grid-cols-2'>
+            <TabsList className='grid h-full grid-cols-2 rounded-xl bg-neutral-300 p-2'>
               <TabsTrigger value='signin'>Sign in</TabsTrigger>
               <TabsTrigger value='signup'>Sign up</TabsTrigger>
             </TabsList>
@@ -345,7 +356,7 @@ const Auth: React.FC = () => {
                 <Button
                   type='submit'
                   disabled={isLoading}
-                  className='h-12 w-full rounded-lg bg-[#c12116] font-semibold text-white hover:bg-[#a01e14] disabled:cursor-not-allowed disabled:opacity-50'
+                  className='h-12 w-full rounded-full bg-[#c12116] font-semibold text-white hover:bg-[#a01e14] disabled:cursor-not-allowed disabled:opacity-50'
                 >
                   {isLoading ? 'Signing in...' : 'Login'}
                 </Button>
@@ -481,7 +492,7 @@ const Auth: React.FC = () => {
                 <Button
                   type='submit'
                   disabled={isRegisterLoading}
-                  className='h-12 w-full rounded-lg bg-[#c12116] font-semibold text-white hover:bg-[#a01e14] disabled:cursor-not-allowed disabled:opacity-50'
+                  className='h-12 w-full rounded-full bg-[#c12116] font-semibold text-white hover:bg-[#a01e14] disabled:cursor-not-allowed disabled:opacity-50'
                 >
                   {isRegisterLoading ? 'Creating account...' : 'Register'}
                 </Button>

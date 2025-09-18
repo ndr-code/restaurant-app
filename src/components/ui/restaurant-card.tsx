@@ -54,12 +54,18 @@ function RestaurantCard({
         className={`flex-shrink-0 overflow-hidden rounded-md sm:rounded-xl ${getImageSize()}`}
       >
         <img
-          src={restaurant.image || '/icons/bk-logo.png'}
+          src={restaurant.images?.[0] || restaurant.logo || '/icons/bk-logo.png'}
           alt={`${restaurant.name || 'Restaurant'} logo`}
           className='h-full w-full object-cover'
           loading='lazy'
           onError={(e) => {
-            (e.target as HTMLImageElement).src = '/icons/bk-logo.png';
+            const img = e.target as HTMLImageElement;
+            // Try logo if first image fails, then fallback
+            if (img.src === (restaurant.images?.[0] || '')) {
+              img.src = restaurant.logo || '/icons/bk-logo.png';
+            } else if (img.src !== window.location.origin + '/icons/bk-logo.png') {
+              img.src = '/icons/bk-logo.png';
+            }
           }}
         />
       </div>
@@ -75,13 +81,13 @@ function RestaurantCard({
         <div className='mb-1 flex items-center gap-1'>
           <Star className='h-3 w-3 fill-yellow-400 text-yellow-400' />
           <span className={`${textSizes.rating} font-medium`}>
-            {(restaurant.rating || 0).toFixed(1)}
+            {(restaurant.star || 0).toFixed(1)}
           </span>
         </div>
 
         {/* Location and Distance */}
         <div className={`flex items-center gap-2 ${textSizes.location}`}>
-          <span>{restaurant.location || 'Unknown location'}</span>
+          <span>{restaurant.place || 'Unknown location'}</span>
           <span>•</span>
           <span>{distance}</span>
         </div>

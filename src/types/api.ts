@@ -60,11 +60,17 @@ export interface ChangePasswordRequest {
 export interface Restaurant {
   id: number;
   name: string;
-  description: string;
-  location: string;
-  rating: number;
-  priceRange: string;
-  image: string;
+  description?: string;
+  place: string; // API uses 'place' not 'location'
+  star: number; // API uses 'star' not 'rating'
+  logo: string; // API uses 'logo' not 'image'
+  images: string[]; // API provides array of food images
+  reviewCount: number;
+  menuCount: number;
+  priceRange: {
+    min: number;
+    max: number;
+  };
   isOpen?: boolean;
 }
 
@@ -128,7 +134,12 @@ export interface UpdateCartItemRequest {
 }
 
 // Order types
-export type OrderStatus = 'preparing' | 'on_the_way' | 'delivered' | 'done' | 'cancelled';
+export type OrderStatus =
+  | 'preparing'
+  | 'on_the_way'
+  | 'delivered'
+  | 'done'
+  | 'cancelled';
 export type PaymentMethod = 'credit_card' | 'debit_card' | 'cash' | 'e_wallet';
 
 export interface Order {

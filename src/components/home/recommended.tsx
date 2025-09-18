@@ -4,6 +4,7 @@ import RestaurantCard from '../ui/restaurant-card';
 import { useScreenSize } from '../../hooks';
 import { Button } from '../ui/button';
 import type { Restaurant } from '../../types/Restaurant';
+import SkeletonCard from './skeleton-card';
 
 function Recommended() {
   const { isMobile } = useScreenSize();
@@ -65,9 +66,10 @@ function Recommended() {
       <div className='mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-10 sm:px-6 lg:px-4'>
         {/* Loading State */}
         {isLoading && (
-          <div className='py-8 text-center'>
-            <div className='inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600'></div>
-            <p className='mt-2 text-gray-600'>Memuat restoran...</p>
+          <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
+            {Array.from({ length: initialLimit }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
           </div>
         )}
 
@@ -90,6 +92,15 @@ function Recommended() {
                   console.log('View details for:', restaurant.name)
                 }
               />
+            ))}
+          </div>
+        )}
+
+        {/* Loading More Skeleton Cards */}
+        {isLoadingMore && (
+          <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
+            {Array.from({ length: initialLimit }).map((_, index) => (
+              <SkeletonCard key={`loading-more-${index}`} />
             ))}
           </div>
         )}

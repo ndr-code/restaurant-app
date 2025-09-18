@@ -37,14 +37,32 @@ api.interceptors.response.use(
       localStorage.removeItem(tokenKey);
       localStorage.removeItem(userDataKey);
       // Redirect to login page or trigger logout action
-      window.location.href = '/login';
+      if (typeof window !== 'undefined') {
+        window.location.href = '/auth';
+      }
     }
-    
+
     // Handle network errors
     if (!error.response) {
       console.error('Network error:', error.message);
+      // Return a custom error for network issues
+      return Promise.reject({
+        ...error,
+        message: 'Network connection failed. Please check your internet connection.',
+        isNetworkError: true
+      });
     }
-    
+
+    // Handle API server errors
+    if (error.response?.status >= 500) {
+      console.error('Server error:', error.response.status);
+      return Promise.reject({
+        ...error,
+        message: 'Server is temporarily unavailable. Please try again later.',
+        isServerError: true
+      });
+    }
+
     return Promise.reject(error);
   }
 );

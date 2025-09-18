@@ -7,7 +7,13 @@ import Footer from '@/components/layout/Footer';
 import Navbar from '@/components/layout/Navbar';
 import { useSearchState } from '@/hooks/useSearch';
 const Home: React.FC = () => {
-  const { searchQuery, hasSearched, isSearching, handleSearch, clearSearch, setSearchComplete } = useSearchState();
+  const {
+    searchQuery,
+    hasSearched,
+    handleSearch,
+    clearSearch,
+    setSearchComplete,
+  } = useSearchState();
 
   return (
     <div className='relative bg-neutral-50'>

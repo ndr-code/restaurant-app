@@ -12,8 +12,7 @@ function Searchbar({ onSearch, onClear }: SearchbarProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const { data: suggestions = [], isLoading: suggestionsLoading } =
-    useSearchSuggestions(searchValue);
+  const { data: suggestions = [] } = useSearchSuggestions(searchValue);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -176,26 +175,48 @@ function Searchbar({ onSearch, onClear }: SearchbarProps) {
                   className='text-foreground hover:bg-muted flex w-full items-center gap-3 px-4 py-3 text-left transition-colors'
                   whileHover={{ backgroundColor: 'var(--muted)' }}
                 >
-                  <div className='flex h-8 w-8 items-center justify-center rounded-full bg-primary/10'>
+                  <div className='bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full'>
                     {suggestion.type === 'restaurant' && (
-                      <svg className='h-4 w-4 text-primary' fill='currentColor' viewBox='0 0 20 20'>
-                        <path fillRule='evenodd' d='M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z' clipRule='evenodd' />
+                      <svg
+                        className='text-primary h-4 w-4'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          d='M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z'
+                          clipRule='evenodd'
+                        />
                       </svg>
                     )}
                     {suggestion.type === 'dish' && (
-                      <svg className='h-4 w-4 text-primary' fill='currentColor' viewBox='0 0 20 20'>
+                      <svg
+                        className='text-primary h-4 w-4'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'
+                      >
                         <path d='M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z' />
                       </svg>
                     )}
                     {suggestion.type === 'cuisine' && (
-                      <svg className='h-4 w-4 text-primary' fill='currentColor' viewBox='0 0 20 20'>
-                        <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clipRule='evenodd' />
+                      <svg
+                        className='text-primary h-4 w-4'
+                        fill='currentColor'
+                        viewBox='0 0 20 20'
+                      >
+                        <path
+                          fillRule='evenodd'
+                          d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
+                          clipRule='evenodd'
+                        />
                       </svg>
                     )}
                   </div>
                   <div className='flex-1'>
                     <p className='text-sm font-medium'>{suggestion.text}</p>
-                    <p className='text-xs text-muted-foreground capitalize'>{suggestion.type}</p>
+                    <p className='text-muted-foreground text-xs capitalize'>
+                      {suggestion.type}
+                    </p>
                   </div>
                 </motion.button>
               ))}

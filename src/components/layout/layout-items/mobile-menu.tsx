@@ -23,11 +23,11 @@ function MobileMenu({ isScrolled = false }: MobileMenuProps) {
   const navigate = useNavigate();
 
   const handleSignIn = () => {
-    navigate(ROUTES.LOGIN);
+    navigate(ROUTES.AUTH_LOGIN);
   };
 
   const handleSignUp = () => {
-    navigate(ROUTES.REGISTER);
+    navigate(ROUTES.AUTH_REGISTER);
   };
 
   const handleLogout = () => {

@@ -9,8 +9,6 @@ import type { AppDispatch } from '@/store';
 import { ROUTES } from '@/config/routes';
 import Home from '@/pages/Home';
 import Auth from '@/pages/Auth';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
 import Cart from '@/pages/Cart';
 import Orders from '@/pages/Orders';
 import Restaurants from '@/pages/Restaurants';
@@ -42,8 +40,6 @@ function App() {
 
           {/* Auth Routes */}
           <Route path={ROUTES.AUTH} element={<Auth />} />
-          <Route path={ROUTES.LOGIN} element={<Login />} />
-          <Route path={ROUTES.REGISTER} element={<Register />} />
 
           {/* Cart & Checkout */}
           <Route path={ROUTES.CART} element={<Cart />} />

@@ -7,8 +7,7 @@ export { default as Contact } from './Contact';
 export { default as Help } from './Help';
 
 // Auth Pages
-export { default as Login } from './Login';
-export { default as Register } from './Register';
+export { default as Auth } from './Auth';
 
 // Protected Pages
 export { default as Cart } from './Cart';

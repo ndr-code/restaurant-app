@@ -1,9 +1,9 @@
 import React from 'react';
-import Navbar from '@/components/layout/navbar';
 import Hero from '@/components/home/hero';
-import Footer from '@/components/layout/footer';
 import HomeMenu from '@/components/home/home-menu';
 import Recommended from '@/components/home/recommended';
+import Footer from '../components/layout/footer';
+import Navbar from '../components/layout/navbar';
 
 const Home: React.FC = () => {
   return (

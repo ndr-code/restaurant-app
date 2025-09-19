@@ -1,6 +1,6 @@
-import { Star, MapPin } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useScreenSize } from '../../hooks';
+import { MapPin } from 'lucide-react';
 
 interface MenuCardProps {
   menu: {

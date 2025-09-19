@@ -144,19 +144,18 @@ function SearchResult({
     <div ref={searchResultRef}>
       <div className='mx-auto mb-8 flex max-w-7xl flex-row items-center justify-between px-4 sm:px-6 lg:px-4'>
         <div className='flex-1'>
-          <h1 className='display-md-extrabold'>Results for '{searchQuery}'</h1>
-          {!isLoading && (restaurants.length > 0 || menus.length > 0) && (
-            <p className='mt-1 text-sm text-gray-600'>
-              Found{' '}
-              {(restaurantData?.pagination?.total || 0) +
-                (menuData?.pagination?.total || 0)}{' '}
-              results
-              {restaurants.length > 0 && ` • ${restaurants.length} restaurants`}
-              {menus.length > 0 && ` • ${menus.length} menus`}
-            </p>
-          )}
+          <h1 className='display-md-extrabold'>Search</h1>
         </div>
+
         <div className='flex items-center gap-4'>
+          {onClearSearch && (
+            <button
+              onClick={onClearSearch}
+              className='text-lg-extrabold cursor-pointer text-neutral-600 hover:underline'
+            >
+              Close Search
+            </button>
+          )}
           <p
             className='text-lg-extrabold text-primary cursor-pointer hover:underline'
             onClick={() => navigate(ROUTES.RESTAURANTS)}
@@ -166,14 +165,33 @@ function SearchResult({
         </div>
       </div>
       {/* Search bar in results */}
-      <div className='mx-auto mb-6 max-w-7xl px-4 sm:px-6 lg:px-4'>
+      <div className='mt-8--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- mx-auto mb-8 w-full flex-1 px-4 sm:px-6 lg:px-4'>
         <Searchbar
           onSearch={onSearch}
           onClear={onClearSearch}
           defaultValue={searchQuery}
         />
       </div>
+
       <div className='mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-10 sm:px-6 lg:px-4'>
+        {searchQuery && (
+          <div>
+            <h1 className='display-md-extrabold'>
+              Results for '{searchQuery}'
+            </h1>
+            {!isLoading && (restaurants.length > 0 || menus.length > 0) && (
+              <p className='mt-1 text-sm text-gray-600'>
+                Found{' '}
+                {(restaurantData?.pagination?.total || 0) +
+                  (menuData?.pagination?.total || 0)}{' '}
+                results
+                {restaurants.length > 0 &&
+                  ` • ${restaurants.length} restaurants`}
+                {menus.length > 0 && ` • ${menus.length} menus`}
+              </p>
+            )}
+          </div>
+        )}
         {/* Loading State */}
         {isLoading && (
           <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
@@ -182,7 +200,6 @@ function SearchResult({
             ))}
           </div>
         )}
-
         {/* Error State */}
         {error && (
           <div className='py-4 text-center'>
@@ -198,7 +215,6 @@ function SearchResult({
             </button>
           </div>
         )}
-
         {/* Restaurant Results */}
         {restaurants.length > 0 && (
           <div className='mb-8'>
@@ -218,7 +234,6 @@ function SearchResult({
             </div>
           </div>
         )}
-
         {/* Menu Results */}
         {menus.length > 0 && (
           <div className='mb-8'>
@@ -236,7 +251,6 @@ function SearchResult({
             </div>
           </div>
         )}
-
         {/* Loading More Skeleton Cards */}
         {isLoadingMore && (
           <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
@@ -245,9 +259,9 @@ function SearchResult({
             ))}
           </div>
         )}
-
         {/* No Results State */}
-        {!isLoading &&
+        {searchQuery &&
+          !isLoading &&
           !error &&
           restaurants.length === 0 &&
           menus.length === 0 && (
@@ -256,24 +270,9 @@ function SearchResult({
                 <h3 className='mb-2 text-2xl font-medium text-gray-900'>
                   No results found
                 </h3>
-                <p className='mb-6 text-gray-600'>
-                  We couldn't find any restaurants or menus matching "
-                  {searchQuery}". Try searching with different keywords.
-                </p>
-
-                {onClearSearch && (
-                  <Button
-                    variant='outline'
-                    onClick={onClearSearch}
-                    className='mx-auto'
-                  >
-                    Browse All Restaurants
-                  </Button>
-                )}
               </div>
             </div>
           )}
-
         {/* Show More Button */}
         {hasMore && (
           <Button
@@ -292,7 +291,6 @@ function SearchResult({
             )}
           </Button>
         )}
-
         {/* No More Data Message */}
         {!hasMore && (restaurants.length > 0 || menus.length > 0) && (
           <div className='mt-4 text-center'>

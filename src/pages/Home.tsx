@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Hero from '@/components/home/hero';
 import HomeMenu from '@/components/home/home-menu';
 import Recommended from '@/components/home/recommended';
@@ -8,6 +8,8 @@ import Navbar from '@/components/layout/Navbar';
 import { useSearchState } from '@/hooks/useSearch';
 import { GeolocationProvider } from '../providers/GeolocationProvider';
 const Home: React.FC = () => {
+  const [showSearchMode, setShowSearchMode] = useState(false);
+
   const {
     searchQuery,
     hasSearched,
@@ -15,6 +17,15 @@ const Home: React.FC = () => {
     clearSearch,
     setSearchComplete,
   } = useSearchState();
+
+  const handleToggleSearchMode = () => {
+    setShowSearchMode(!showSearchMode);
+  };
+
+  const handleSearchFromRecommended = (query: string) => {
+    handleSearch(query);
+    setShowSearchMode(false); // Switch back to search results after search
+  };
 
   return (
     <GeolocationProvider autoRequest={true}>
@@ -29,8 +40,15 @@ const Home: React.FC = () => {
             onSearchComplete={setSearchComplete}
             onSearch={handleSearch}
           />
+        ) : showSearchMode ? (
+          <SearchResult
+            searchQuery=''
+            onClearSearch={() => setShowSearchMode(false)}
+            onSearchComplete={setSearchComplete}
+            onSearch={handleSearchFromRecommended}
+          />
         ) : (
-          <Recommended />
+          <Recommended onToggleSearchMode={handleToggleSearchMode} />
         )}
         <Footer />
       </div>

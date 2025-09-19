@@ -7,8 +7,13 @@ import { Button } from '../ui/button';
 import { ROUTES } from '../../config/routes';
 import type { Restaurant } from '../../types/Restaurant';
 import SkeletonCard from './skeleton-card';
+import { Separator } from '@radix-ui/react-separator';
 
-function Recommended() {
+interface RecommendedProps {
+  onToggleSearchMode?: () => void;
+}
+
+function Recommended({ onToggleSearchMode }: RecommendedProps) {
   const navigate = useNavigate();
   const { isMobile } = useScreenSize();
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,12 +66,21 @@ function Recommended() {
     <div>
       <div className='mx-auto mb-8 flex max-w-7xl flex-row items-center justify-between px-4 sm:px-6 lg:px-4'>
         <h1 className='display-md-extrabold'>Recommended</h1>
-        <p
-          className='text-lg-extrabold text-primary mt-2 cursor-pointer hover:underline'
-          onClick={() => navigate(ROUTES.RESTAURANTS)}
-        >
-          See All
-        </p>
+        <div className='flex items-center gap-4'>
+          <p
+            className='text-lg-extrabold text-foreground mt-2 cursor-pointer hover:underline'
+            onClick={onToggleSearchMode}
+          >
+            Search
+          </p>
+          <Separator orientation='vertical' />
+          <p
+            className='text-lg-extrabold text-primary mt-2 cursor-pointer hover:underline'
+            onClick={() => navigate(ROUTES.RESTAURANTS)}
+          >
+            See All
+          </p>
+        </div>
       </div>
 
       <div className='mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-10 sm:px-6 lg:px-4'>

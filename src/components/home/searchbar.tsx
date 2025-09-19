@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSearchSuggestions } from '../../hooks/useSearch';
 
 interface SearchbarProps {
   onSearch?: (query: string) => void;
   onClear?: () => void;
+  defaultValue?: string;
 }
 
-function Searchbar({ onSearch, onClear }: SearchbarProps) {
-  const [searchValue, setSearchValue] = useState('');
+function Searchbar({ onSearch, onClear, defaultValue = '' }: SearchbarProps) {
+  const [searchValue, setSearchValue] = useState(defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -35,6 +36,11 @@ function Searchbar({ onSearch, onClear }: SearchbarProps) {
     setShowSuggestions(false);
     onClear?.();
   };
+
+  // Update search value when defaultValue changes
+  React.useEffect(() => {
+    setSearchValue(defaultValue);
+  }, [defaultValue]);
 
   const handleFocus = () => {
     setIsFocused(true);
@@ -97,7 +103,7 @@ function Searchbar({ onSearch, onClear }: SearchbarProps) {
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder='Search restaurants, food, and drink...'
-          className='bg-background/80 border-border text-foreground placeholder:text-muted-foreground focus:ring-primary/50 focus:border-primary w-full rounded-full border py-4 pr-16 pl-12 backdrop-blur-md transition-all duration-300 focus:ring-2 focus:outline-none'
+          className='bg-background/80 border-border placeholder:text-muted-foreground focus:ring-primary/50 focus:border-primary focus:text-muted-foreground w-full rounded-full border py-4 pr-16 pl-12 backdrop-blur-md transition-all duration-300 focus:ring-2 focus:outline-none'
           style={{
             backgroundColor: isFocused
               ? 'var(--background)'

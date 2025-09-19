@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRestaurants } from '../../services/queries/restaurant';
 import RestaurantCard from '../ui/restaurant-card';
 import { useScreenSize } from '../../hooks';
 import { Button } from '../ui/button';
+import { ROUTES } from '../../config/routes';
 import type { Restaurant } from '../../types/Restaurant';
 import SkeletonCard from './skeleton-card';
 
 function Recommended() {
+  const navigate = useNavigate();
   const { isMobile } = useScreenSize();
   const [currentPage, setCurrentPage] = useState(1);
   const [displayedRestaurants, setDisplayedRestaurants] = useState<
@@ -58,7 +61,10 @@ function Recommended() {
     <div>
       <div className='mx-auto mb-8 flex max-w-7xl flex-row items-center justify-between px-4 sm:px-6 lg:px-4'>
         <h1 className='display-md-extrabold'>Recommended</h1>
-        <p className='text-lg-extrabold text-primary mt-2 cursor-pointer'>
+        <p
+          className='text-lg-extrabold text-primary mt-2 cursor-pointer hover:underline'
+          onClick={() => navigate(ROUTES.RESTAURANTS)}
+        >
           See All
         </p>
       </div>
@@ -87,7 +93,6 @@ function Recommended() {
               <RestaurantCard
                 key={restaurant.id}
                 restaurant={restaurant}
-                distance={'-'}
                 onClick={() =>
                   console.log('View details for:', restaurant.name)
                 }

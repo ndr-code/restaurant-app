@@ -1,45 +1,76 @@
-import React, { useState } from 'react';
-import { useSearchRestaurants } from '../../hooks/useSearch';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSearchRestaurants, useSearchMenus } from '../../hooks/useSearch';
 import RestaurantCard from '../ui/restaurant-card';
+import MenuCard from '../ui/menu-card';
 import SkeletonCard from './skeleton-card';
+import Searchbar from './searchbar';
 import { useScreenSize } from '../../hooks';
 import { Button } from '../ui/button';
+import { ROUTES } from '../../config/routes';
 import type { Restaurant } from '../../types/Restaurant';
 
 interface SearchResultProps {
   searchQuery: string;
   onClearSearch?: () => void;
   onSearchComplete?: () => void;
+  onSearch?: (query: string) => void;
 }
 
 function SearchResult({
   searchQuery,
   onClearSearch,
   onSearchComplete,
+  onSearch,
 }: SearchResultProps) {
+  const navigate = useNavigate();
   const { isMobile } = useScreenSize();
   const [currentPage, setCurrentPage] = useState(1);
   const [displayedRestaurants, setDisplayedRestaurants] = useState<
     Restaurant[]
   >([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const searchResultRef = useRef<HTMLDivElement>(null);
 
   const initialLimit = isMobile ? 6 : 12;
 
-  // Fetch search results
-  const { data, isLoading, error, refetch } = useSearchRestaurants({
+  // Fetch search results for restaurants
+  const {
+    data: restaurantData,
+    isLoading: restaurantLoading,
+    error: restaurantError,
+    refetch: refetchRestaurants,
+  } = useSearchRestaurants({
     query: searchQuery,
     page: currentPage,
     limit: initialLimit,
   });
 
+  // Fetch search results for menus
+  const {
+    data: menuData,
+    isLoading: menuLoading,
+    error: menuError,
+    refetch: refetchMenus,
+  } = useSearchMenus({
+    query: searchQuery,
+    page: currentPage,
+    limit: initialLimit,
+  });
+
+  const isLoading = restaurantLoading || menuLoading;
+  const error = restaurantError || menuError;
+
   // Update displayed restaurants when data changes
   React.useEffect(() => {
-    if (data?.restaurants) {
+    if (restaurantData?.restaurants) {
       if (currentPage === 1) {
-        setDisplayedRestaurants(data.restaurants);
+        setDisplayedRestaurants(restaurantData.restaurants);
       } else {
-        setDisplayedRestaurants((prev) => [...prev, ...data.restaurants]);
+        setDisplayedRestaurants((prev) => [
+          ...prev,
+          ...restaurantData.restaurants,
+        ]);
       }
     }
 
@@ -47,7 +78,27 @@ function SearchResult({
     if (!isLoading && onSearchComplete) {
       onSearchComplete();
     }
-  }, [data, currentPage, isLoading, onSearchComplete]);
+  }, [restaurantData, currentPage, isLoading, onSearchComplete]);
+
+  // Auto scroll to search results when data is loaded (only for first page)
+  React.useEffect(() => {
+    if (
+      !isLoading &&
+      (restaurantData?.restaurants || menuData?.menus) &&
+      currentPage === 1 &&
+      searchResultRef.current
+    ) {
+      // Small delay to ensure content is rendered
+      const timeoutId = setTimeout(() => {
+        searchResultRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }, 100);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoading, restaurantData, menuData, currentPage]);
 
   // Reset when search query changes
   React.useEffect(() => {
@@ -57,7 +108,19 @@ function SearchResult({
   }, [searchQuery]);
 
   const restaurants = displayedRestaurants;
-  const hasMore = data?.pagination && currentPage < data.pagination.totalPages;
+  const menus = menuData?.menus || [];
+
+  const hasMoreRestaurants =
+    restaurantData?.pagination &&
+    currentPage < restaurantData.pagination.totalPages &&
+    restaurantData.pagination.total > initialLimit;
+
+  const hasMoreMenus =
+    menuData?.pagination &&
+    currentPage < menuData.pagination.totalPages &&
+    menuData.pagination.total > initialLimit;
+
+  const hasMore = hasMoreRestaurants || hasMoreMenus;
 
   // Function to load more restaurants
   const handleShowMore = async () => {
@@ -69,7 +132,7 @@ function SearchResult({
       setCurrentPage(nextPage);
 
       // Refetch with new page
-      await refetch();
+      await Promise.all([refetchRestaurants(), refetchMenus()]);
     } catch (error) {
       console.error('Error loading more restaurants:', error);
     } finally {
@@ -78,34 +141,38 @@ function SearchResult({
   };
 
   return (
-    <div>
+    <div ref={searchResultRef}>
       <div className='mx-auto mb-8 flex max-w-7xl flex-row items-center justify-between px-4 sm:px-6 lg:px-4'>
         <div className='flex-1'>
           <h1 className='display-md-extrabold'>Results for '{searchQuery}'</h1>
-          {!isLoading && restaurants.length > 0 && (
+          {!isLoading && (restaurants.length > 0 || menus.length > 0) && (
             <p className='mt-1 text-sm text-gray-600'>
-              Found {data?.pagination?.total || restaurants.length} restaurants
+              Found{' '}
+              {(restaurantData?.pagination?.total || 0) +
+                (menuData?.pagination?.total || 0)}{' '}
+              results
+              {restaurants.length > 0 && ` • ${restaurants.length} restaurants`}
+              {menus.length > 0 && ` • ${menus.length} menus`}
             </p>
           )}
         </div>
         <div className='flex items-center gap-4'>
           <p
             className='text-lg-extrabold text-primary cursor-pointer hover:underline'
-            onClick={onClearSearch}
+            onClick={() => navigate(ROUTES.RESTAURANTS)}
           >
             See All
           </p>
-          {onClearSearch && (
-            <button
-              onClick={onClearSearch}
-              className='text-sm text-gray-500 underline hover:text-gray-700'
-            >
-              Clear Search
-            </button>
-          )}
         </div>
       </div>
-
+      {/* Search bar in results */}
+      <div className='mx-auto mb-6 max-w-7xl px-4 sm:px-6 lg:px-4'>
+        <Searchbar
+          onSearch={onSearch}
+          onClear={onClearSearch}
+          defaultValue={searchQuery}
+        />
+      </div>
       <div className='mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-10 sm:px-6 lg:px-4'>
         {/* Loading State */}
         {isLoading && (
@@ -119,9 +186,12 @@ function SearchResult({
         {/* Error State */}
         {error && (
           <div className='py-4 text-center'>
-            <p className='text-red-500'>Failed to search restaurants</p>
+            <p className='text-red-500'>Failed to search</p>
             <button
-              onClick={() => refetch()}
+              onClick={() => {
+                refetchRestaurants();
+                refetchMenus();
+              }}
               className='mt-2 text-sm text-blue-600 hover:underline'
             >
               Try again
@@ -129,19 +199,41 @@ function SearchResult({
           </div>
         )}
 
-        {/* Search Results Grid */}
+        {/* Restaurant Results */}
         {restaurants.length > 0 && (
-          <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
-            {restaurants.map((restaurant) => (
-              <RestaurantCard
-                key={restaurant.id}
-                restaurant={restaurant}
-                distance={'-'}
-                onClick={() =>
-                  console.log('View details for:', restaurant.name)
-                }
-              />
-            ))}
+          <div className='mb-8'>
+            <h2 className='mb-4 text-xl font-bold text-gray-900'>
+              Restaurants
+            </h2>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
+              {restaurants.map((restaurant) => (
+                <RestaurantCard
+                  key={restaurant.id}
+                  restaurant={restaurant}
+                  onClick={() =>
+                    console.log('View details for:', restaurant.name)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Menu Results */}
+        {menus.length > 0 && (
+          <div className='mb-8'>
+            <h2 className='mb-4 text-xl font-bold text-gray-900'>Menus</h2>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3'>
+              {menus.map((menu) => (
+                <MenuCard
+                  key={menu.id}
+                  menu={menu}
+                  onClick={() =>
+                    console.log('View menu details for:', menu.name)
+                  }
+                />
+              ))}
+            </div>
           </div>
         )}
 
@@ -155,29 +247,32 @@ function SearchResult({
         )}
 
         {/* No Results State */}
-        {!isLoading && !error && restaurants.length === 0 && (
-          <div className='py-12 text-center'>
-            <div className='mb-4'>
-              <h3 className='mb-2 text-2xl font-medium text-gray-900'>
-                No restaurants found
-              </h3>
-              <p className='mb-6 text-gray-600'>
-                We couldn't find any restaurants matching "{searchQuery}". Try
-                searching with different keywords.
-              </p>
+        {!isLoading &&
+          !error &&
+          restaurants.length === 0 &&
+          menus.length === 0 && (
+            <div className='py-12 text-center'>
+              <div className='mb-4'>
+                <h3 className='mb-2 text-2xl font-medium text-gray-900'>
+                  No results found
+                </h3>
+                <p className='mb-6 text-gray-600'>
+                  We couldn't find any restaurants or menus matching "
+                  {searchQuery}". Try searching with different keywords.
+                </p>
 
-              {onClearSearch && (
-                <Button
-                  variant='outline'
-                  onClick={onClearSearch}
-                  className='mx-auto'
-                >
-                  Browse All Restaurants
-                </Button>
-              )}
+                {onClearSearch && (
+                  <Button
+                    variant='outline'
+                    onClick={onClearSearch}
+                    className='mx-auto'
+                  >
+                    Browse All Restaurants
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Show More Button */}
         {hasMore && (
@@ -199,9 +294,9 @@ function SearchResult({
         )}
 
         {/* No More Data Message */}
-        {!hasMore && restaurants.length > 0 && (
+        {!hasMore && (restaurants.length > 0 || menus.length > 0) && (
           <div className='mt-4 text-center'>
-            <p className='text-sm text-gray-500'>No more restaurants to load</p>
+            <p className='text-sm text-gray-500'>No more results to load</p>
           </div>
         )}
       </div>

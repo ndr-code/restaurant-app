@@ -2,19 +2,24 @@ import { Star } from 'lucide-react';
 import { motion } from 'motion/react';
 import type { Restaurant } from '../../types/Restaurant';
 import { useScreenSize } from '../../hooks';
+import { useGeolocationContext } from '../../providers/GeolocationProvider';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
-  distance?: string; // Format: "2.4 km"
+  distance?: string; // Format: "2.4 km" - optional override
   onClick?: () => void;
 }
 
 function RestaurantCard({
   restaurant,
-  distance = '2.4 km',
+  distance,
   onClick,
 }: RestaurantCardProps) {
+  const { calculateRestaurantDistance } = useGeolocationContext();
   const { isMobile, isTablet } = useScreenSize();
+
+  // Use provided distance or calculate from geolocation
+  const displayDistance = distance || calculateRestaurantDistance(restaurant);
 
   // Dynamic sizing based on screen size
   const getImageSize = () => {
@@ -89,7 +94,7 @@ function RestaurantCard({
         <div className={`flex items-center gap-2 ${textSizes.location}`}>
           <span>{restaurant.place || 'Unknown location'}</span>
           <span>•</span>
-          <span>{distance}</span>
+          <span>{displayDistance}</span>
         </div>
       </div>
     </motion.div>
